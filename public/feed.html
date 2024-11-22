@@ -1,13 +1,58 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>feed</title>
-		<link type="text/css" rel="stylesheet" href="css/style.css">
-		<script type="text/javascript" src="js/feed.js"></script>
-	</head>
-	<body>
-		
-	
-	</body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page</title>
+  <link rel="stylesheet" href="css/stylefeed.css">
+</head>
+<body>
+  <!-- Main Container -->
+  <div class="container">
+    
+    <!-- User Info Section -->
+    <header class="header">
+      <div class="profile-info">
+        <h1>Welcome Back, <span id="username">User</span>!</h1>
+      </div>
+    </header>
+    
+    <!-- Feed Section -->
+    <main class="feed">
+      <!-- Dynamic Posts Section -->
+      <section id="feed-posts">
+		<article class="feed-post">
+		  <div class="post-pic"></div>
+		  <div class="post-content">
+			<header class="post-header">
+			  <h2 class="post-author">Name</h2>
+			  <time class="post-date" datetime="2024-01-01">DD/MM/YYYY</time>
+			</header>
+			<p class="post-text">Lorem ipsum dolor sit amet consectetur. Eget volutpat lobortis eget et id fames nulla interdum.</p>
+			<footer class="post-actions">
+			  <button aria-label="Like Post">👍</button>
+			  <button aria-label="Share Post">🔁</button>
+			</footer>
+		  </div>
+		</article>
+	  </section>
+	  
+    </main>
+  </div>
+  
+<!-- Floating Action Button -->
+<button class="fab" onclick="openPostModal()" aria-label="Create a new post">+</button>
+
+
+  <!-- Script -->
+  <script>
+    // Example: Dynamic username injection
+    document.getElementById('username').textContent = 'John Doe';
+
+    // Example: Open post modal (stub function)
+    function openPostModal() {
+      alert('Open post creation modal.');
+    }
+  </script>
+</body>
 </html>

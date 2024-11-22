@@ -1,56 +1,16 @@
-/* General Styles */
-body {
-	margin: 0;
-	font-family: Arial, sans-serif;
-	background-color: #220533; /* Dark background */
-	color: white;
-  }
-  
-  /* Feed Posts Section */
-  #feed-posts {
+/* Feed Posts Section */
+#feed-posts {
 	margin: auto;
 	width: 90%; /* Adjust the width of the feed posts container */
 	max-width: 800px; /* Set a maximum width */
 	padding-top: 20px;
 	text-align: center;
 	background-color: #3c0264; /* Dark purple for the background */
-  }
-  
-  /* Container for Login Form */
-  #container {
-	padding-top: 100px;
-	margin: auto;
-	width: 200px;
-	text-align: center;
-	background-color: #53217a; /* Slightly lighter purple */
-	border-radius: 10px;
 	padding: 20px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border-radius: 10px;
   }
   
-  /* Form Styles */
-  .form {
-	font-size: 18px;
-  }
-  
-  .form input {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	font-size: 18px;
-	width: 90%;
-	padding: 10px;
-	border: none;
-	border-radius: 5px;
-  }
-  
-  /* Error display */
-  #errordisplay {
-	font-size: 12px;
-	color: #EE0019;
-	margin-top: -10px;
-  }
-  
-  /* Feed Post Styling */
+  /* Individual Post Styling */
   .feed-post {
 	background-color: #53217a; /* Slightly lighter purple for the post background */
 	padding: 20px;
@@ -61,7 +21,7 @@ body {
 	align-items: flex-start;
   }
   
-  /* Post Content */
+  /* Add the box and adjust the layout of post content */
   .post-pic {
 	width: 50px;
 	height: 50px;
@@ -78,7 +38,7 @@ body {
 	border: 1px solid #4c1b71; /* Darker border color for definition */
   }
   
-  /* Post Header */
+  /* Header of the post */
   .post-header {
 	display: flex;
 	justify-content: space-between;
@@ -96,7 +56,6 @@ body {
 	color: #b5b5b5;
   }
   
-  /* Post Text */
   .post-text {
 	margin: 15px 0;
 	font-size: 16px;
@@ -104,7 +63,6 @@ body {
 	line-height: 1.6;
   }
   
-  /* Post Actions */
   .post-actions {
 	display: flex;
 	justify-content: flex-start;
@@ -123,9 +81,9 @@ body {
   .post-actions button:hover {
 	background-color: #ffb74d; /* Lighter orange when hovered */
   }
-  
+
   /* Floating Action Button (FAB) */
-  .fab {
+.fab {
 	position: fixed;
 	bottom: 20px;
 	right: 20px;
@@ -152,4 +110,13 @@ body {
   .fab:focus {
 	outline: none; /* Remove default button focus outline */
   }
+  
+  /* General Styles */
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	background-color: #220533; /* Set background to black */
+	color: white;
+  }
+  
   
