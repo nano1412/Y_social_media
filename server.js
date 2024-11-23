@@ -60,28 +60,28 @@ const queryDB = (sql) => {
 
 
 //sql command of SetupTableOnDatabase
-// CREATE TABLE IF NOT EXISTS user (
+// CREATE TABLE IF NOT EXISTS users (
 //     user_id INT AUTO_INCREMENT PRIMARY KEY,
 //     username VARCHAR(255),
 //     password VARCHAR(100),
 //     regis_date TIMESTAMP,
 //     profile_img VARCHAR(100));
 
-// CREATE TABLE IF NOT EXISTS post (
+// CREATE TABLE IF NOT EXISTS posts (
 //     post_id INT AUTO_INCREMENT PRIMARY KEY,
 //     user_id INT,
 //     content VARCHAR(1000),
 //     regis_date TIMESTAMP,
 //     FOREIGN KEY (user_id) REFERENCES user(user_id));
 
-// CREATE TABLE IF NOT EXISTS comment (
+// CREATE TABLE IF NOT EXISTS comments (
 //     comment_id INT AUTO_INCREMENT PRIMARY KEY,
 //     post_id INT,
 //     content VARCHAR(1000),
 //     regis_date TIMESTAMP,
 //     FOREIGN KEY (post_id) REFERENCES post(post_id));
 
-// CREATE TABLE IF NOT EXISTS like_account (
+// CREATE TABLE IF NOT EXISTS like_accounts (
 //     liked_id INT AUTO_INCREMENT PRIMARY KEY,
 //     post_id INT,
 //     liked_user_id INT,
@@ -90,34 +90,29 @@ const queryDB = (sql) => {
 //     FOREIGN KEY (liked_user_id) REFERENCES user(user_id));
 
 async function SetupTableOnDatabase() {
-    let user = "CREATE TABLE IF NOT EXISTS user (user_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),password VARCHAR(100),regis_date TIMESTAMP,profile_img VARCHAR(100))";
+    let user = "CREATE TABLE IF NOT EXISTS users (user_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),password VARCHAR(100),regis_date TIMESTAMP,profile_img VARCHAR(100))";
     let result = await queryDB(user);
-    let post = "CREATE TABLE IF NOT EXISTS post (post_id INT AUTO_INCREMENT PRIMARY KEY,user_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (user_id) REFERENCES user(user_id))";
+    let post = "CREATE TABLE IF NOT EXISTS posts (post_id INT AUTO_INCREMENT PRIMARY KEY,user_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (user_id) REFERENCES user(user_id))";
     result = await queryDB(post);
-    let comment = "CREATE TABLE IF NOT EXISTS comment (comment_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (post_id) REFERENCES post(post_id))";
+    let comment = "CREATE TABLE IF NOT EXISTS comments (comment_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (post_id) REFERENCES post(post_id))";
     result = await queryDB(comment);
-    let like_account = "CREATE TABLE IF NOT EXISTS like_account (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,liked_user_id INT,content VARCHAR(1000),FOREIGN KEY (post_id) REFERENCES post(post_id),FOREIGN KEY (liked_user_id) REFERENCES user(user_id))";
+    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,liked_user_id INT,content VARCHAR(1000),FOREIGN KEY (post_id) REFERENCES post(post_id),FOREIGN KEY (liked_user_id) REFERENCES user(user_id))";
     result = await queryDB(like_account);
 }
 
-    // Call start
-    (async () => {
-        console.log('before start');
+//setup
+(async () => {
+    await SetupTableOnDatabase();
+})();
 
-        await SetupTableOnDatabase();
-
-        console.log('after start');
-    })();
 app.post('/regisDB', async (req, res) => {
     let now_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     console.log(req.body);
-    // let sql = "CREATE TABLE IF NOT EXISTS user (user_id INT AUTO_INCREMENT PRIMARY KEY, reg_date TIMESTAMP, username VARCHAR(255), email VARCHAR(100),password VARCHAR(100),img VARCHAR(100))";
-    // let result = await queryDB(sql);
 
-    sql = `INSERT INTO userInfo (username, reg_date, email , password,img) VALUES ("${req.body.username}", "${now_date}", "${req.body.email}", "${req.body.password}", "avatar.png")`;
+    sql = `INSERT INTO users (username, password, regis_date ,profile_img) VALUES ("${req.body.username}", "${req.body.password}", "${now_date}","avatar.png")`;
     result = await queryDB(sql);
-    console.log("New record created successfullyone");
+    console.log("New User added");
 
     res.cookie('username', req.body.username);
     res.cookie('img', "avatar.png");
@@ -150,7 +145,7 @@ app.post('/profilepic', (req, res) => {
 })
 
 const updateImg = async (username, filen) => {
-    let sql = `UPDATE user SET img = '${filen}' WHERE 
+    let sql = `UPDATE users SET profile_img = '${filen}' WHERE 
         username = '${username}'`
 
     result = await queryDB(sql);
@@ -167,18 +162,17 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/readPost', async (req, res) => {
-    // let createdata = "CREATE TABLE IF NOT EXISTS post (id INT AUTO_INCREMENT PRIMARY KEY, reg_date TIMESTAMP, user_id INT, message VARCHAR(500))";
-    // let result = await queryDB(createdata);
 
-    let sql = `Select * From post`;
+    let sql = `Select * From posts`;
     result = await queryDB(sql);
     result = Object.assign({}, result);
     res.json(result);
 })
 
 app.post('/writePost', async (req, res) => {
+    let now_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
     console.log(req.body);
-    sql = `INSERT INTO post (user_id,message) VALUES ("${req.body.user}", "${req.body.message}")`;
+    sql = `INSERT INTO posts (user_id,content,regis_date) VALUES ("${req.body.user}", "${req.body.message}","${now_date}")`;
     result = await queryDB(sql);
     console.log("New post created successfully");
     res.send("create");
@@ -187,7 +181,7 @@ app.post('/writePost', async (req, res) => {
 app.post('/checkLogin', async (req, res) => {
     console.log(req.body);
 
-    let sql = `Select * From user`;
+    let sql = `Select * From users`;
     result = await queryDB(sql);
     result = Object.assign({}, result);
 
@@ -206,8 +200,9 @@ app.post('/checkLogin', async (req, res) => {
     }
 })
 
+//
 const getImage = async (username) => {
-    let sql = `Select username, img From user`;
+    let sql = `Select username, profile_img From users`;
     result = await queryDB(sql);
     result = Object.assign({}, result);
 
