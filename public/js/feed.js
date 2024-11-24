@@ -26,7 +26,7 @@ function getCookie(name){
 function pageLoad() {
     document.getElementById('postbutton').onclick = getData;
 
-	document.getElementById('displayPic').onclick = fileUpload;
+	// document.getElementById('displayPic').onclick = fileUpload;
 	
 	var username = getCookie('username');
 
@@ -44,9 +44,9 @@ function getData() {
 }
 
 // Trigger the file upload dialog when the profile picture area is clicked
-function fileUpload() {
-    document.getElementById('fileField').click();
-}
+// function fileUpload() {
+//     document.getElementById('fileField').click();
+// }
 
 // Handle the file submission for uploading a profile picture
 async function fileSubmit() {
@@ -134,8 +134,10 @@ async function writePost(msg) {
 }
 
 // Display posts in the feed
+
+//need REFACTOR
 function showPost(data) {
-    var divTag = document.getElementById("feed-container");
+    var divTag = document.getElementById("feed-posts");
     divTag.innerHTML = "";  // Clear the previous posts
 
     data.forEach(post => {
