@@ -26,13 +26,13 @@ function getCookie(name){
 function pageLoad() {
     document.getElementById('postbutton').onclick = getData;
 
-	document.getElementById('displayPic').onclick = fileUpload;
+	// document.getElementById('displayPic').onclick = fileUpload;
 	
 	var username = getCookie('username');
 
 	document.getElementById("username").textContent = username;
 	console.log(getCookie('img'));
-	showImg('img/'+getCookie('img'));
+	// showImg('img/'+getCookie('img'));
 	readPost();
 }
 
@@ -137,7 +137,7 @@ async function writePost(msg) {
 
 //need REFACTOR
 function showPost(data) {
-    var divTag = document.getElementById("feed-container");
+    var divTag = document.getElementById("feed-posts");
     divTag.innerHTML = "";  // Clear the previous posts
 
     data.forEach(post => {

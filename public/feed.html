@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,46 +8,49 @@
   <link rel="stylesheet" href="css/stylefeed.css">
   <script type="text/javascript" src="js/feed.js"></script>
 </head>
+
 <body>
   <!-- Main Container -->
   <div class="container">
-    
+
     <!-- User Info Section -->
-     
+
     <header class="header">
       <div id="displayPic">
-        <img src= "img/avatar.png" alt="">
+        <img src="img/avatar.png" alt="">
       </div>
-      
+
       <div class="profile-info">
         <h1>Welcome Back, <span id="username">User</span>!</h1>
       </div>
     </header>
-    
-    <!-- Feed Section -->
-    <main class="feed">
-      <!-- Dynamic Posts Section -->
       <section id="feed-posts">
-		<article class="feed-post">
-		  <div class="post-pic"></div>
-		  <div class="post-content">
-			<header class="post-header">
-			  <h2 class="post-author">Name</h2>
-			  <time class="post-date" datetime="2024-01-01">DD/MM/YYYY</time>
-			</header>
-			<p class="post-text">Lorem ipsum dolor sit amet consectetur. Eget volutpat lobortis eget et id fames nulla interdum.</p>
-			<footer class="post-actions">
-			  <button aria-label="Like Post">👍</button>
-			</footer>
-		  </div>
-		</article>
-	  </section>
-	  
-    </main>
+
+        <article class="feed-post">
+          <div class="post-pic"></div>
+          <div class="post-content">
+            <header class="post-header">
+              <h2 class="post-author">Name</h2>
+              <time class="post-date" datetime="2024-01-01">DD/MM/YYYY</time>
+            </header>
+            <p class="post-text">Lorem ipsum dolor sit amet consectetur. Eget volutpat lobortis eget et id fames nulla
+              interdum.</p>
+            <footer class="post-actions">
+              <button aria-label="Like Post">👍</button>
+              <button aria-label="Like Post">💬</button>
+            </footer>
+          </div>
+        </article>
+
+       
+      </section>
+
+
+
   </div>
-  
-<!-- Floating Action Button -->
-<button id="postbutton" onclick="openPostModal()" aria-label="Create a new post">+</button>
+
+  <!-- Floating Action Button -->
+  <button id="postbutton" onclick="openPostModal()" aria-label="Create a new post">+</button>
 
 
   <!-- Script
@@ -60,4 +64,5 @@
     }
   </script> -->
 </body>
+
 </html>
