@@ -36,7 +36,7 @@ const imageFilter = (req, file, cb) => {
 const con = mysql.createConnection({
     host: "localhost",
     user: "Nano1412",
-    password: "154712349876kK!",
+    password: "123456789!",
     database: "test_Social_Media" // change to "y_Social_Media" in actual production
 })
 
@@ -64,6 +64,7 @@ const queryDB = (sql) => {
 //     user_id INT AUTO_INCREMENT PRIMARY KEY,
 //     username VARCHAR(255),
 //     password VARCHAR(100),
+//     Email VARCHAR(100),
 //     regis_date TIMESTAMP,
 //     profile_img VARCHAR(100));
 
@@ -90,7 +91,7 @@ const queryDB = (sql) => {
 //     FOREIGN KEY (liked_user_id) REFERENCES user(user_id));
 
 async function SetupTableOnDatabase() {
-    let user = "CREATE TABLE IF NOT EXISTS users (user_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),password VARCHAR(100),regis_date TIMESTAMP,profile_img VARCHAR(100))";
+    let user = "CREATE TABLE IF NOT EXISTS users (user_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),password VARCHAR(100),Email VARCHAR(100),regis_date TIMESTAMP,profile_img VARCHAR(100))";
     let result = await queryDB(user);
     let post = "CREATE TABLE IF NOT EXISTS posts (post_id INT AUTO_INCREMENT PRIMARY KEY,user_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (user_id) REFERENCES user(user_id))";
     result = await queryDB(post);
@@ -110,7 +111,11 @@ app.post('/regisDB', async (req, res) => {
 
     console.log(req.body);
 
-    sql = `INSERT INTO users (username, password, regis_date ,profile_img) VALUES ("${req.body.username}", "${req.body.password}", "${now_date}","avatar.png")`;
+    if(req.body.password != req.body.RetypePassword){
+        return res.redirect('register.html?error=2');
+    }
+
+    sql = `INSERT INTO users (username, password,Email, regis_date ,profile_img) VALUES ("${req.body.username}", "${req.body.password}", "${req.body.email}","${now_date}","avatar.png")`;
     result = await queryDB(sql);
     console.log("New User added");
 
@@ -180,6 +185,10 @@ app.post('/writePost', async (req, res) => {
 
 app.post('/checkLogin', async (req, res) => {
     console.log(req.body);
+
+    if(req.body.method == "Register"){
+        return res.redirect('register.html');
+    }
 
     let sql = `Select * From users`;
     result = await queryDB(sql);
