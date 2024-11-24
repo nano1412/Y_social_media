@@ -1,3 +1,7 @@
+.header{
+	display: flex;
+}
+
 /* Feed Posts Section */
 #feed-posts {
 	margin: auto;
@@ -83,7 +87,7 @@
   }
 
   /* Floating Action Button (FAB) */
-.fab {
+  #postbutton {
 	position: fixed;
 	bottom: 20px;
 	right: 20px;
@@ -103,11 +107,11 @@
 	transition: background-color 0.3s ease;
   }
   
-  .fab:hover {
+  #postbutton:hover {
 	background-color: #ffb74d; /* Light orange when hovered */
   }
   
-  .fab:focus {
+  #postbutton:focus {
 	outline: none; /* Remove default button focus outline */
   }
   

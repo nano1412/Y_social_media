@@ -5,13 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile Page</title>
   <link rel="stylesheet" href="css/stylefeed.css">
+  <script type="text/javascript" src="js/feed.js"></script>
 </head>
 <body>
   <!-- Main Container -->
   <div class="container">
     
     <!-- User Info Section -->
+     
     <header class="header">
+      <div id="displayPic">
+        <img src= "img/avatar.png" alt="">
+      </div>
+      
       <div class="profile-info">
         <h1>Welcome Back, <span id="username">User</span>!</h1>
       </div>
@@ -41,10 +47,10 @@
   </div>
   
 <!-- Floating Action Button -->
-<button class="fab" onclick="openPostModal()" aria-label="Create a new post">+</button>
+<button id="postbutton" onclick="openPostModal()" aria-label="Create a new post">+</button>
 
 
-  <!-- Script -->
+  <!-- Script
   <script>
     // Example: Dynamic username injection
     document.getElementById('username').textContent = 'John Doe';
@@ -53,6 +59,6 @@
     function openPostModal() {
       alert('Open post creation modal.');
     }
-  </script>
+  </script> -->
 </body>
 </html>

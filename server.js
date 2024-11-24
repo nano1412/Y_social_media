@@ -73,31 +73,31 @@ const queryDB = (sql) => {
 //     user_id INT,
 //     content VARCHAR(1000),
 //     regis_date TIMESTAMP,
-//     FOREIGN KEY (user_id) REFERENCES user(user_id));
+//     FOREIGN KEY (user_id) REFERENCES users(user_id));
 
 // CREATE TABLE IF NOT EXISTS comments (
 //     comment_id INT AUTO_INCREMENT PRIMARY KEY,
 //     post_id INT,
 //     content VARCHAR(1000),
 //     regis_date TIMESTAMP,
-//     FOREIGN KEY (post_id) REFERENCES post(post_id));
+//     FOREIGN KEY (post_id) REFERENCES posts(post_id));
 
 // CREATE TABLE IF NOT EXISTS like_accounts (
 //     liked_id INT AUTO_INCREMENT PRIMARY KEY,
 //     post_id INT,
 //     liked_user_id INT,
 //     content VARCHAR(1000),
-//     FOREIGN KEY (post_id) REFERENCES post(post_id),
-//     FOREIGN KEY (liked_user_id) REFERENCES user(user_id));
+//     FOREIGN KEY (post_id) REFERENCES posts(post_id),
+//     FOREIGN KEY (liked_user_id) REFERENCES users(user_id));
 
 async function SetupTableOnDatabase() {
     let user = "CREATE TABLE IF NOT EXISTS users (user_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),password VARCHAR(100),Email VARCHAR(100),regis_date TIMESTAMP,profile_img VARCHAR(100))";
     let result = await queryDB(user);
-    let post = "CREATE TABLE IF NOT EXISTS posts (post_id INT AUTO_INCREMENT PRIMARY KEY,user_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (user_id) REFERENCES user(user_id))";
+    let post = "CREATE TABLE IF NOT EXISTS posts (post_id INT AUTO_INCREMENT PRIMARY KEY,user_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (user_id) REFERENCES users(user_id))";
     result = await queryDB(post);
-    let comment = "CREATE TABLE IF NOT EXISTS comments (comment_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (post_id) REFERENCES post(post_id))";
+    let comment = "CREATE TABLE IF NOT EXISTS comments (comment_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,content VARCHAR(1000),regis_date TIMESTAMP,FOREIGN KEY (post_id) REFERENCES posts(post_id))";
     result = await queryDB(comment);
-    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,liked_user_id INT,content VARCHAR(1000),FOREIGN KEY (post_id) REFERENCES post(post_id),FOREIGN KEY (liked_user_id) REFERENCES user(user_id))";
+    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,liked_user_id INT,content VARCHAR(1000),FOREIGN KEY (post_id) REFERENCES posts(post_id),FOREIGN KEY (liked_user_id) REFERENCES users(user_id))";
     result = await queryDB(like_account);
 }
 

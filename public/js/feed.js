@@ -1,48 +1,39 @@
 // Check if the user is logged in based on cookies
-function checkCookie() {
-    var username = getCookie("username");  // Get the username cookie
-    if (!username) {
-        window.location = "login.html";  // Redirect if no username cookie
-    }
-}
+// function checkCookie() {
+//     var username = getCookie("username");  // Get the username cookie
+//     if (!username) {
+//         window.location = "login.html";  // Redirect if no username cookie
+//     }
+// }
 
 // Call the checkCookie function to validate the cookie before showing feed
-checkCookie();
+// checkCookie();
 
 window.onload = pageLoad;
 
 // Helper function to get cookies
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i].trim();
-        if (c.indexOf(nameEQ) == 0) {
-            return c.substring(nameEQ.length, c.length);
-        }
-    }
-    return null;
+function getCookie(name){
+	var value = "";
+	try{
+		value = document.cookie.split("; ").find(row => row.startsWith(name)).split('=')[1]
+		return value
+	}catch(err){
+		return false
+	} 
 }
 
 // Page Load logic
 function pageLoad() {
-    // Set event listeners for actions
     document.getElementById('postbutton').onclick = getData;
-    document.getElementById('displayPic').onclick = fileUpload;
-    document.getElementById('fileField').onchange = fileSubmit;
 
-    // Get the username from the cookie and display it
-    var username = getCookie('username');
-    document.getElementById("username").innerHTML = username;
+	document.getElementById('displayPic').onclick = fileUpload;
+	
+	var username = getCookie('username');
 
-    // Display the profile image from cookie data
-    var profileImage = getCookie('img');  // Get image filename from cookie
-    if (profileImage) {
-        showImg(profileImage);  // Display the profile picture
-    }
-
-    // Fetch posts from the server
-    readPost();
+	document.getElementById("username").textContent = username;
+	console.log(getCookie('img'));
+	// showImg('img/'+getCookie('img'));
+	readPost();
 }
 
 // Function to get new post data
