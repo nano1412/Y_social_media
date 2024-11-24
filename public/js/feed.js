@@ -32,7 +32,7 @@ function pageLoad() {
 
 	document.getElementById("username").textContent = username;
 	console.log(getCookie('img'));
-	// showImg('img/'+getCookie('img'));
+	showImg('img/'+getCookie('img'));
 	readPost();
 }
 
@@ -44,9 +44,9 @@ function getData() {
 }
 
 // Trigger the file upload dialog when the profile picture area is clicked
-function fileUpload() {
-    document.getElementById('fileField').click();
-}
+// function fileUpload() {
+//     document.getElementById('fileField').click();
+// }
 
 // Handle the file submission for uploading a profile picture
 async function fileSubmit() {
@@ -134,6 +134,8 @@ async function writePost(msg) {
 }
 
 // Display posts in the feed
+
+//need REFACTOR
 function showPost(data) {
     var divTag = document.getElementById("feed-container");
     divTag.innerHTML = "";  // Clear the previous posts
