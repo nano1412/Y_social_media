@@ -4,9 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile Page</title>
+  <title>Feed Page</title>
   <link rel="stylesheet" href="css/stylefeed.css">
-  <script type="text/javascript" src="js/feed.js"></script>
 </head>
 
 <body>
@@ -14,7 +13,6 @@
   <div class="container">
 
     <!-- User Info Section -->
-
     <header class="header">
       <div id="displayPic">
         <img src="img/avatar.png" alt="">
@@ -48,21 +46,36 @@
 
 
   </div>
-
   <!-- Floating Action Button -->
   <button id="postbutton" onclick="openPostModal()" aria-label="Create a new post">+</button>
 
+<!-- Floating Post Box -->
+<div id="postbox" style="display: none;">
+  <textarea id="post-text" placeholder="Write your post..."></textarea>
+  <button id="submit-post" onclick="submitPost()">Submit</button>
+</div>
 
-  <!-- Script
+
+  <!-- JavaScript -->
   <script>
-    // Example: Dynamic username injection
-    document.getElementById('username').textContent = 'John Doe';
-
-    // Example: Open post modal (stub function)
+    // Function to toggle visibility of the post box
     function openPostModal() {
-      alert('Open post creation modal.');
+      const postbox = document.getElementById('postbox');
+      postbox.style.display = postbox.style.display === 'none' ? 'block' : 'none';
     }
-  </script> -->
+
+    // Function to handle post submission
+    function submitPost() {
+      const postText = document.getElementById('post-text').value;
+      if (postText.trim() !== '') {
+        alert('Your post: ' + postText); // Replace with actual logic to submit the post
+        document.getElementById('post-text').value = ''; // Clear text area
+        document.getElementById('postbox').style.display = 'none'; // Hide post box
+      } else {
+        alert('Please write something to post.');
+      }
+    }
+  </script>
 </body>
 
 </html>
