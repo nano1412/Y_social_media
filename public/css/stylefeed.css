@@ -2,6 +2,10 @@
 	display: flex;
 }
 
+#displayPic img{
+	/* height: 50%; */
+}
+
 /* Feed Posts Section */
 #feed-posts {
 	margin: auto;
