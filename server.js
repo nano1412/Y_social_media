@@ -10,8 +10,10 @@ const path = require('path');
 const mysql = require('mysql');
 
 app.use(express.static('public'));
+app.use(express.json({ limit: "50mb" })); // เพิ่มขีดจำกัด JSON เป็น 50 MB
+app.use(express.urlencoded({ limit: "50mb", extended: true })); // เพิ่มขีดจำกัด URL-encoded เป็น 50 MB
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: true,parameterLimit:100000, limit:"200mb"}));
 app.use(cookieParser());
 
 const storage = multer.diskStorage({
