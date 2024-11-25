@@ -137,13 +137,15 @@ async function writePost(msg) {
 
 //need REFACTOR
 function showPost(data) {
-    var divTag = document.getElementById("feed-posts");
-    divTag.innerHTML = "";  // Clear the previous posts
+    var posts = document.getElementById("feed-posts");
+    posts.innerHTML = "";  // Clear the previous posts
 
     data.forEach(post => {
-        var temp = document.createElement("div");
-        temp.className = "newsfeed";
-        divTag.appendChild(temp);
+        var tempArticle = document.createElement("article");
+        tempArticle.className = "feed-post";
+        posts.appendChild(tempArticle);
+
+        
 
         var temp1 = document.createElement("div");
         temp1.className = "postmsg";

@@ -22,26 +22,26 @@
         <h1>Welcome Back, <span id="username">User</span>!</h1>
       </div>
     </header>
-      <section id="feed-posts">
+    <section id="feed-posts">
 
-        <article class="feed-post">
-          <div class="post-pic"></div>
-          <div class="post-content">
-            <header class="post-header">
-              <h2 class="post-author">Name</h2>
-              <time class="post-date" datetime="2024-01-01">DD/MM/YYYY</time>
-            </header>
-            <p class="post-text">Lorem ipsum dolor sit amet consectetur. Eget volutpat lobortis eget et id fames nulla
-              interdum.</p>
-            <footer class="post-actions">
-              <button aria-label="Like Post">👍</button>
-              <button aria-label="Like Post">💬</button>
-            </footer>
-          </div>
-        </article>
+      <article class="feed-post">
+        <img src="img/avatar.png" alt="">
+        <div class="post-content">
+          <header class="post-header">
+            <h2 class="post-author">Name</h2>
+            <time class="post-date" datetime="2024-01-01">DD/MM/YYYY</time>
+          </header>
+          <p class="post-text">Lorem ipsum dolor sit amet consectetur. Eget volutpat lobortis eget et id fames nulla
+            interdum.</p>
+          <footer class="post-actions">
+            <button aria-label="Like Post">👍</button>
+            <button aria-label="Like Post">💬</button>
+          </footer>
+        </div>
+      </article>
 
-       
-      </section>
+
+    </section>
 
 
 
@@ -49,11 +49,11 @@
   <!-- Floating Action Button -->
   <button id="postbutton" onclick="openPostModal()" aria-label="Create a new post">+</button>
 
-<!-- Floating Post Box -->
-<div id="postbox" style="display: none;">
-  <textarea id="post-text" placeholder="Write your post..."></textarea>
-  <button id="submit-post" onclick="submitPost()">Submit</button>
-</div>
+  <!-- Floating Post Box -->
+  <div id="postbox" style="display: none;">
+    <textarea id="post-text" placeholder="Write your post..."></textarea>
+    <button id="submit-post" onclick="submitPost()">Submit</button>
+  </div>
 
 
   <!-- JavaScript -->
