@@ -36,6 +36,12 @@ function pageLoad() {
         };
     }
 
+    const feedBtn = document.getElementById('feed');
+    if (feedBtn) {
+        feedBtn.onclick = function () {
+            window.location.href = "http://localhost:3000/feed.html";
+        };
+    }
     var username = getCookie('username');
 
 	document.getElementById("username").textContent = username;
@@ -141,7 +147,6 @@ async function showPost(data) {
         tempFooter.appendChild(tempLike);
     }
 
-    
 }
 
 window.onload = pageLoad;

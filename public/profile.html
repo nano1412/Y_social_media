@@ -11,22 +11,25 @@
   <div class="profile-page">
     <div class="header">
       <div id="displayPic">
-        <img id = "UserProfile" src="img/avatar.png" alt="Profile Picture">
-    </div>
-    <form action="/profilepic" method="post" id="formId" enctype="multipart/form-data">
+        <img id="UserProfile" src="img/avatar.png" alt="Profile Picture">
+      </div>
+      <form action="/profilepic" method="post" id="formId" enctype="multipart/form-data">
         <input type="file" id="fileField" name="avatar" hidden>
-    </form>
+      </form>
     
-    <div class="profile-info">
-      <h1 id = "username">Name</h1>
-      <p>Member Since DD/MM/YYYY</p>
-      <a href="#" class="logout-btn" id="logout">Log Out</a>
-  </div>
-  
+
+      <div class="profile-info">
+        <h1>Name</h1>
+        <p>Member Since DD/MM/YYYY</p>
+        <a href="#" class="logout-btn" id="logout">Log Out</a>
+        <!-- New Go to Feed Button -->
+        <a href="#" class="feedbtn" id="feed">Go to Feed</a>
+      </div>
     </div>
-    <div id="posts">
-      
-      
+
+    <div class="posts">
+      <!-- Your posts here -->
+
     </div>
   </div>
 </body>
