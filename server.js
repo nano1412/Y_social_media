@@ -123,6 +123,38 @@ app.post('/regisDB', async (req, res) => {
     return res.redirect('feed.html');
 });
 
+app.get("/getLikeCount", async (req, res) => {
+    const { post_id } = req.query;
+
+    try {
+        // Count likes based on liked_id
+        const countQuery = `
+            SELECT COUNT(liked_id) AS like_count 
+            FROM like_accounts 
+            WHERE post_id = ${post_id}
+        `;
+        const result = await queryDB(countQuery);
+        res.json({ like_count: result[0].like_count });
+    } catch (err) {
+        console.error(`Error fetching like count for post ID ${post_id}:`, err);
+        res.status(500).send("Server error.");
+    }
+});
+
+// Get like count for a post
+app.get("/getLikeCount", async (req, res) => {
+    const { post_id } = req.query;
+
+    try {
+        const countQuery = `SELECT COUNT(*) AS like_count FROM like_accounts WHERE post_id = ${post_id}`;
+        const result = await queryDB(countQuery);
+        res.json({ like_count: result[0].like_count });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server error.");
+    }
+});
+
 
 app.post('/profilepic', (req, res) => {
     let upload = multer({ storage: storage, fileFilter: imageFilter }).single("avatar");
