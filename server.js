@@ -171,6 +171,13 @@ app.get('/readPost', async (req, res) => {
     res.json(result);
 })
 
+app.get('/readmyPost', async (req, res) => {
+    let sql = `Select * From posts join users on users.username = posts.username`;
+    result = await queryDB(sql);
+    result = Object.assign({}, result);
+    res.json(result);
+})
+
 app.get('/getlikedata', async (req,res) => {
     
     let sql = `Select posts.post_id, count(like_accounts.liked_id) as count From like_accounts 
