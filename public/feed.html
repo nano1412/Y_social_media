@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Feed Page</title>
   <link rel="stylesheet" href="css/stylefeed.css">
+  <script type="text/javascript" src="js/feed.js"></script>
 </head>
 
 <body>
@@ -15,7 +16,7 @@
     <!-- User Info Section -->
     <header class="header">
       <div id="displayPic">
-        <img src="img/avatar.png" alt="">
+        <img id = "UserProfile" src="img/avatar.png" alt="">
       </div>
 
       <div class="profile-info">
@@ -25,17 +26,17 @@
     <section id="feed-posts">
 
       <article class="feed-post">
-        <img src="img/avatar.png" alt="">
+        <img id = "postProfile" src="img/avatar.png" alt="">
         <div class="post-content">
           <header class="post-header">
             <h2 class="post-author">Name</h2>
-            <time class="post-date" datetime="2024-01-01">DD/MM/YYYY</time>
+            <p class="post-date">DD/MM/YYYY</p>
           </header>
           <p class="post-text">Lorem ipsum dolor sit amet consectetur. Eget volutpat lobortis eget et id fames nulla
             interdum.</p>
           <footer class="post-actions">
             <button aria-label="Like Post">👍</button>
-            <button aria-label="Like Post">💬</button>
+            <button aria-label="comment Post">💬</button>
           </footer>
         </div>
       </article>
@@ -52,7 +53,7 @@
   <!-- Floating Post Box -->
   <div id="postbox" style="display: none;">
     <textarea id="post-text" placeholder="Write your post..."></textarea>
-    <button id="submit-post" onclick="submitPost()">Submit</button>
+    <button id="submit-post" onclick="writePost()">Submit</button>
   </div>
 
 

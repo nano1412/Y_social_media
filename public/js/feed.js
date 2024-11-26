@@ -1,10 +1,10 @@
 // Check if the user is logged in based on cookies
-// function checkCookie() {
-//     var username = getCookie("username");  // Get the username cookie
-//     if (!username) {
-//         window.location = "login.html";  // Redirect if no username cookie
-//     }
-// }
+function checkCookie() {
+    var username = getCookie("username");  // Get the username cookie
+    if (!username) {
+        window.location = "login.html";  // Redirect if no username cookie
+    }
+}
 
 // Call the checkCookie function to validate the cookie before showing feed
 // checkCookie();
@@ -24,6 +24,7 @@ function getCookie(name){
 
 // Page Load logic
 function pageLoad() {
+    console.log("in pageLoad");
     document.getElementById('postbutton').onclick = getData;
 
 	// document.getElementById('displayPic').onclick = fileUpload;
@@ -111,50 +112,124 @@ async function readPost() {
 }
 
 // Write a new post to the server
-async function writePost(msg) {
-    var username = getCookie('username');
+async function writePost() {
+    let newJson = JSON.stringify({
+		user: getCookie('username'),
+		message: document.getElementById('post-text').value
+	});
+    document.getElementById('post-text').value = '';
 
-    try {
-        let response = await fetch('/writePost', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: username, message: msg })
-        });
+	let response = await fetch("/writePost", {
+		method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+		body: newJson,
+	});
 
-        if (response.ok) {
-            readPost();  // Refresh the posts after posting
-        } else {
-            console.error('Failed to post message');
-        }
-    } catch (error) {
-        console.error('Error posting message:', error);
-    }
+	readPost();
 }
 
 // Display posts in the feed
 
 //need REFACTOR
-function showPost(data) {
+async function showPost(data) {
+    
+    var keys = Object.keys(data);
     var posts = document.getElementById("feed-posts");
     posts.innerHTML = "";  // Clear the previous posts
 
-    data.forEach(post => {
-        var tempArticle = document.createElement("article");
-        tempArticle.className = "feed-post";
-        posts.appendChild(tempArticle);
+    let response = await fetch("/getlovedata");
+	let lovedata = await response.json()
 
-        
+	let response2 = await fetch("/getcommentdata");
+	let commentdata = await response2.json()
 
-        var temp1 = document.createElement("div");
-        temp1.className = "postmsg";
-        temp1.innerHTML = post.message;  // Display post message
-        temp.appendChild(temp1);
+    for (var i = keys.length-1; i >=0 ; i--) {
+		let postID = data[keys[i]]["Post_ID"];
+        let post_owner = data[keys[i]]["username"];
+    
+        var temparticle = document.createElement("article");
+        temparticle.className = "feed-post";
+        posts.appendChild(temparticle);
 
-        var temp2 = document.createElement("div");
-        temp2.className = "postuser";
-        temp2.innerHTML = "Posted by: " + post.username;  // Display username of poster
-        temp.appendChild(temp2);
-    });
+        var tempimg = document.createElement("img");
+        tempimg.id = "postProfile";
+        tempimg.src ='img/' + (await getImage(post_owner));
+        tempimg.alt = post_owner;
+        temparticle.appendChild(tempimg);
+
+        var tempcontainer = document.createElement("div");
+        tempcontainer.className = "post-content";
+        temparticle.appendChild(tempcontainer);
+
+        var tempheader = document.createElement("header");
+        tempheader.className = "post-header";
+        tempcontainer.appendChild(tempheader);
+
+        var tempPostOwner = document.createElement("h2");
+        tempPostOwner.className = "post-author";
+        tempPostOwner.innerHTML = post_owner;
+        tempheader.appendChild(tempPostOwner);
+
+        var tempdate = document.createElement("p");
+        tempdate.className = "post-date";
+        let postDate = new Date(data[keys[i]]["post_date"])
+
+		const localDate = new Date(postDate.getTime() - postDate.getTimezoneOffset() * 60000);
+
+		const formattedDate = localDate.toLocaleString('th-TH', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: false,
+		});
+
+		tempdate.innerHTML = (formattedDate);
+		tempheader.appendChild(tempdate);
+
+        var tempcontent = document.createElement("p");
+        tempcontent.className = "post-text";
+        tempcontent.innerHTML = data[keys[i]]["content"];
+        tempcontainer.appendChild(tempcontent);
+
+        var tempFooter = document.createElement("footer");
+        tempFooter.className = "post-actions";
+        tempcontainer.appendChild(tempFooter);
+
+        var tempLike = document.createElement("button");
+        tempLike.ariaLabel = "Like Post";
+        tempLike.innerHTML = "👍" + "";
+        tempFooter.appendChild(tempLike);
+
+        var tempcomment = document.createElement("button");
+        tempcomment.ariaLabel = "comment Post";
+        tempcomment.innerHTML = "💬" + "";
+        tempFooter.appendChild(tempcomment);
+
+    }
+
+    
 }
+
+async function getImage(username){
+	let response = await fetch("/getAvatarImage", {
+		method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+		body:  JSON.stringify({
+			user: username,
+		}),
+	});
+
+	const data = await response.json(); 
+	//console.log(data.avatarUrl);
+    return data.avatarUrl; 
+}
+
+
