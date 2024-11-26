@@ -157,12 +157,6 @@ async function showPost(data) {
         temparticle.className = "feed-post";
         posts.appendChild(temparticle);
 
-        var tempimg = document.createElement("img");
-        tempimg.id = "postProfile";
-        tempimg.src ='img/' + (await getImage(post_owner));
-        tempimg.alt = post_owner;
-        temparticle.appendChild(tempimg);
-
         var tempcontainer = document.createElement("div");
         tempcontainer.className = "post-content";
         temparticle.appendChild(tempcontainer);
