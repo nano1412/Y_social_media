@@ -15,14 +15,21 @@
 
     <!-- User Info Section -->
     <header class="header">
-      <div id="displayPic">
-        <img id = "UserProfile" src="img/avatar.png" alt="">
+      <div id="displayPic" onclick="toProfile()">
+        <!-- <img id = "UserProfile" src="img/avatar.png" alt=""> -->
       </div>
 
       <div class="profile-info">
         <h1>Welcome Back, <span id="username">User</span>!</h1>
       </div>
     </header>
+    <article class="feed-post">
+        <div id="postbox">
+          <textarea id="post-text" placeholder="Write your post..."></textarea>
+          <button id="submit-post" onclick="writePost()">Submit</button>
+        </div>
+
+    </article>
     <section id="feed-posts">
 
       <article class="feed-post">
@@ -46,14 +53,6 @@
 
 
 
-  </div>
-  <!-- Floating Action Button -->
-  <button id="postbutton" onclick="openPostModal()" aria-label="Create a new post">+</button>
-
-  <!-- Floating Post Box -->
-  <div id="postbox" style="display: none;">
-    <textarea id="post-text" placeholder="Write your post..."></textarea>
-    <button id="submit-post" onclick="writePost()">Submit</button>
   </div>
 
 

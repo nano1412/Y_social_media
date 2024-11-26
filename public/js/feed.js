@@ -7,7 +7,7 @@ function checkCookie() {
 }
 
 // Call the checkCookie function to validate the cookie before showing feed
-// checkCookie();
+checkCookie();
 
 window.onload = pageLoad;
 
@@ -25,7 +25,7 @@ function getCookie(name){
 // Page Load logic
 function pageLoad() {
     console.log("in pageLoad");
-    document.getElementById('postbutton').onclick = getData;
+    // document.getElementById('postbutton').onclick = getData;
 
 	// document.getElementById('displayPic').onclick = fileUpload;
 	
@@ -33,7 +33,7 @@ function pageLoad() {
 
 	document.getElementById("username").textContent = username;
 	console.log(getCookie('img'));
-	// showImg('img/'+getCookie('img'));
+	showImg('img/'+getCookie('img'));
 	readPost();
 }
 
@@ -111,12 +111,17 @@ async function readPost() {
     }
 }
 
+function toProfile(){
+    
+}
+
 // Write a new post to the server
 async function writePost() {
     let newJson = JSON.stringify({
 		user: getCookie('username'),
 		message: document.getElementById('post-text').value
 	});
+    console.log(document.getElementById('post-text').value);
     document.getElementById('post-text').value = '';
 
 	let response = await fetch("/writePost", {
@@ -140,11 +145,9 @@ async function showPost(data) {
     var posts = document.getElementById("feed-posts");
     posts.innerHTML = "";  // Clear the previous posts
 
-    let response = await fetch("/getlovedata");
+    let response = await fetch("/getlikedata");
 	let lovedata = await response.json()
-
-	let response2 = await fetch("/getcommentdata");
-	let commentdata = await response2.json()
+    console.log("lovedata");
 
     for (var i = keys.length-1; i >=0 ; i--) {
 		let postID = data[keys[i]]["Post_ID"];
@@ -204,12 +207,6 @@ async function showPost(data) {
         tempLike.ariaLabel = "Like Post";
         tempLike.innerHTML = "👍" + "";
         tempFooter.appendChild(tempLike);
-
-        var tempcomment = document.createElement("button");
-        tempcomment.ariaLabel = "comment Post";
-        tempcomment.innerHTML = "💬" + "";
-        tempFooter.appendChild(tempcomment);
-
     }
 
     

@@ -63,43 +63,33 @@ const queryDB = (sql) => {
 
 //sql command of SetupTableOnDatabase
 // CREATE TABLE IF NOT EXISTS users (
-//     user_id INT AUTO_INCREMENT PRIMARY KEY,
-//     username VARCHAR(255),
-//     password VARCHAR(100),
-//     Email VARCHAR(100),
-//     regis_date TIMESTAMP,
-//     profile_img VARCHAR(100));
+    // username VARCHAR(255) PRIMARY KEY,
+    // password VARCHAR(100),
+    // Email VARCHAR(100),
+    // regis_date TIMESTAMP,
+    // profile_img VARCHAR(100));
 
 // CREATE TABLE IF NOT EXISTS posts (
 //     post_id INT AUTO_INCREMENT PRIMARY KEY,
-//     user_id INT,
+//     username VARCHAR(255),
 //     content VARCHAR(1000),
 //     post_date TIMESTAMP,
-//     FOREIGN KEY (user_id) REFERENCES users(user_id));
-
-// CREATE TABLE IF NOT EXISTS comments (
-//     comment_id INT AUTO_INCREMENT PRIMARY KEY,
-//     post_id INT,
-//     content VARCHAR(1000),
-//     comment_date TIMESTAMP,
-//     FOREIGN KEY (post_id) REFERENCES posts(post_id));
+//     FOREIGN KEY (username) REFERENCES users(username));
 
 // CREATE TABLE IF NOT EXISTS like_accounts (
 //     liked_id INT AUTO_INCREMENT PRIMARY KEY,
 //     post_id INT,
-//     liked_user_id INT,
+//     like_username VARCHAR(255) ,
 //     content VARCHAR(1000),
 //     FOREIGN KEY (post_id) REFERENCES posts(post_id),
-//     FOREIGN KEY (liked_user_id) REFERENCES users(user_id));
+//     FOREIGN KEY (like_username) REFERENCES users(username));
 
 async function SetupTableOnDatabase() {
-    let user = "CREATE TABLE IF NOT EXISTS users (user_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),password VARCHAR(100),Email VARCHAR(100),regis_date TIMESTAMP,profile_img VARCHAR(100))";
+    let user = "CREATE TABLE IF NOT EXISTS users (username VARCHAR(255) PRIMARY KEY,password VARCHAR(100),Email VARCHAR(100),regis_date TIMESTAMP,profile_img VARCHAR(100))";
     let result = await queryDB(user);
-    let post = "CREATE TABLE IF NOT EXISTS posts (post_id INT AUTO_INCREMENT PRIMARY KEY,user_id INT,content VARCHAR(1000),post_date TIMESTAMP,FOREIGN KEY (user_id) REFERENCES users(user_id))";
+    let post = "CREATE TABLE IF NOT EXISTS posts (post_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),content VARCHAR(1000),post_date TIMESTAMP,FOREIGN KEY (username) REFERENCES users(username))";
     result = await queryDB(post);
-    let comment = "CREATE TABLE IF NOT EXISTS comments (comment_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,content VARCHAR(1000),comment_date TIMESTAMP,FOREIGN KEY (post_id) REFERENCES posts(post_id))";
-    result = await queryDB(comment);
-    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,liked_user_id INT,content VARCHAR(1000),FOREIGN KEY (post_id) REFERENCES posts(post_id),FOREIGN KEY (liked_user_id) REFERENCES users(user_id))";
+    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,like_username VARCHAR(255) ,content VARCHAR(1000),FOREIGN KEY (post_id) REFERENCES posts(post_id),FOREIGN KEY (like_username) REFERENCES users(username))";
     result = await queryDB(like_account);
 }
 
@@ -169,37 +159,26 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/readPost', async (req, res) => {
-    console.log("in readPost");
-    let sql = `Select * From posts join users on users.user_id = posts.user_id`;
+    let sql = `Select * From posts join users on users.username = posts.username`;
     result = await queryDB(sql);
     result = Object.assign({}, result);
     res.json(result);
 })
 
-app.get('/getlovedata', async (req,res) => {
+app.get('/getlikedata', async (req,res) => {
     
     let sql = `Select posts.post_id, count(like_accounts.liked_id) as count From like_accounts 
     join posts on like_accounts.post_id = posts.post_id 
     group by posts.post_id`;
     result = await queryDB(sql);
     result = Object.assign({},result);
-    res.json(result);
-})
-
-app.get('/getcommentdata', async (req,res) => {
-    
-    let sql = `Select *, count(comments.comment_id) as count From comments 
-    join posts on comments.post_id = posts.post_id 
-    group by posts.post_id`;
-    result = await queryDB(sql);
-    result = Object.assign({},result);
+    console.log(result);
     res.json(result);
 })
 
 app.post('/writePost', async (req, res) => {
     let now_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    console.log(req.body);
-    sql = `INSERT INTO posts (user_id,content,regis_date) VALUES ("${req.body.user}", "${req.body.message}","${now_date}")`;
+    sql = `INSERT INTO posts (username,content,post_date) VALUES ("${req.body.user}", "${req.body.message}","${now_date}")`;
     result = await queryDB(sql);
     console.log("New post created successfully");
     res.send("create");
