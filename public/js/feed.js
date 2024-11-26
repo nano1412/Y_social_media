@@ -150,7 +150,7 @@ async function showPost(data) {
     console.log("lovedata");
 
     for (var i = keys.length-1; i >=0 ; i--) {
-		let postID = data[keys[i]]["Post_ID"];
+		let postID = data[keys[i]]["post_id"];
         let post_owner = data[keys[i]]["username"];
     
         var temparticle = document.createElement("article");
@@ -199,11 +199,26 @@ async function showPost(data) {
 
         var tempLike = document.createElement("button");
         tempLike.ariaLabel = "Like Post";
+        tempLike.onclick = function() {likethispost(getCookie("username"),postID);};
         tempLike.innerHTML = "👍" + "";
         tempFooter.appendChild(tempLike);
     }
 
     
+}
+
+async function likethispost(username, postid) {
+    let response = await fetch("/likethispost", {
+		method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+		body:  JSON.stringify({
+			user: username,
+            postid: postid
+		}),
+	});
 }
 
 async function getImage(username){

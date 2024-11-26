@@ -191,6 +191,38 @@ app.post('/writePost', async (req, res) => {
     res.send("create");
 })
 
+app.post('/likethispost', async (req, res) => {
+    sqlask = `select like_username from like_accounts where like_username = '${req.body.user}'`;
+    result = await queryDB(sqlask);
+    console.log(result);
+    
+    let keys = Object.keys(data);
+
+            let correctly = false;
+
+            for (var i = 0; i < keys.length; i++) {
+                let username = data[keys[i]].username;
+                let password = data[keys[i]].password;
+
+                if (sendVal.username == username && sendVal.password == password) {
+                    correctly = true;
+                };
+            }
+
+            if (correctly) {
+                console.log("correct password & username!");
+                resolve(true);
+            } else {
+                console.log("incorrect password & username!");
+                resolve(false);
+            }
+
+    sql = `INSERT INTO like_accounts (post_id,like_username) VALUES ("${req.body.postid}", "${req.body.user}")`;
+    result = await queryDB(sql);
+    console.log("New like created successfully");
+    res.send("create");
+})
+
 app.post('/checkLogin', async (req, res) => {
     console.log(req.body);
 
