@@ -55,8 +55,10 @@ body {
   
   .header {
     display: flex;
-    align-items: center;
-  }
+    align-items: center; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+    justify-content: start; /* จัดให้อยู่ฝั่งซ้าย */
+}
+
   
   .profile-pic {
     width: 80px;
@@ -156,3 +158,19 @@ body {
   .post-content {
     flex: 1; /* Take up remaining space */
   }
+
+  #displayPic img {
+    width: 100%; /* ปรับให้สัมพันธ์กับ container */
+    height: auto; /* รักษาอัตราส่วน */
+    border-radius: inherit; /* สืบทอดมุมโค้งจาก #displayPic */
+}
+
+  #displayPic {
+    width: 80px; /* กำหนดขนาดแน่นอน */
+    height: 80px; /* กำหนดความสูง */
+    border-radius: 50%; /* ทำให้เป็นวงกลม */
+    margin: 0; /* ไม่ให้มีการจัดตำแหน่งกลาง */
+    display: inline-block; /* ป้องกันไม่ให้จัดตำแหน่ง block */
+}
+
+
