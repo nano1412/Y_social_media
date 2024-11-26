@@ -18,6 +18,13 @@ function pageLoad() {
             window.location.href = "http://localhost:3000/login.html";
         };
     }
+
+    const feedBtn = document.getElementById('feed');
+    if (feedBtn) {
+        feedBtn.onclick = function () {
+            window.location.href = "http://localhost:3000/feed.html";
+        };
+    }
 }
 
 window.onload = pageLoad;
