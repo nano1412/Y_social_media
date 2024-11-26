@@ -103,20 +103,26 @@ app.post('/regisDB', async (req, res) => {
 
     console.log(req.body);
 
-    if(req.body.password != req.body.RetypePassword){
+    // Validate password
+    if (req.body.password != req.body.RetypePassword) {
         return res.redirect('register.html?error=2');
     }
 
-    sql = `INSERT INTO users (username, password,Email, regis_date ,profile_img) VALUES ("${req.body.username}", "${req.body.password}", "${req.body.email}","${now_date}","avatar.png")`;
+    // Insert user into the database with default profile image
+    sql = `INSERT INTO users (username, password, Email, regis_date, profile_img) 
+           VALUES ("${req.body.username}", "${req.body.password}", "${req.body.email}", "${now_date}", "avatar.png")`;
     result = await queryDB(sql);
     console.log("New User added");
 
+    // Set cookies with username and the default image filename
     res.cookie('username', req.body.username);
-    res.cookie('img', "avatar.png");
+    res.cookie('img', "avatar.png");  // Default image for the new user
     console.log("set cookie");
-    res.end;
+
+    res.end();
     return res.redirect('feed.html');
-})
+});
+
 
 app.post('/profilepic', (req, res) => {
     let upload = multer({ storage: storage, fileFilter: imageFilter }).single("avatar");
