@@ -10,12 +10,19 @@
 <body>
   <div class="profile-page">
     <div class="header">
-      <div class="profile-pic"></div>
-      <div class="profile-info">
-        <h1>Name</h1>
-        <p>Member Since DD/MM/YYYY</p>
-        <a href="#" class="logout-btn">Log Out</a>
-      </div>
+      <div id="displayPic">
+        <img id = "UserProfile" src="img/avatar.png" alt="Profile Picture">
+    </div>
+    <form action="/profilepic" method="post" id="formId" enctype="multipart/form-data">
+        <input type="file" id="fileField" name="avatar" hidden>
+    </form>
+    
+    <div class="profile-info">
+      <h1>Name</h1>
+      <p>Member Since DD/MM/YYYY</p>
+      <a href="#" class="logout-btn" id="logout">Log Out</a>
+  </div>
+  
     </div>
     <div class="posts">
       <div class="post">
