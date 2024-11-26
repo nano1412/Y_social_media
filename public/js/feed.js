@@ -13,43 +13,29 @@ window.onload = pageLoad;
 
 // Helper function to get cookies
 function getCookie(name){
-    var value = "";
-    try{
-        value = document.cookie.split("; ").find(row => row.startsWith(name)).split('=')[1]
-        return value
-    }catch(err){
-        return false
-    } 
+	var value = "";
+	try{
+		value = document.cookie.split("; ").find(row => row.startsWith(name)).split('=')[1]
+		return value
+	}catch(err){
+		return false
+	} 
 }
 
 // Page Load logic
 function pageLoad() {
     console.log("in pageLoad");
+    // document.getElementById('postbutton').onclick = getData;
 
-    var username = getCookie('username');
-    document.getElementById("username").textContent = username;
+	// document.getElementById('displayPic').onclick = fileUpload;
+	
+	var username = getCookie('username');
 
-    // ตรวจสอบค่าคุกกี้ img และแสดงภาพ
-    var imgFilename = getCookie('img');
-    console.log("Image filename from cookie: " + imgFilename);
-
-    // หากไม่มีค่าในคุกกี้ img ให้ใช้ค่า default (avatar.png)
-    if (!imgFilename) {
-        imgFilename = 'avatar.png';  // Default image if no img cookie
-        document.cookie = `img=${imgFilename}; path=/`;  // Set default image cookie
-    }
-
-    showImg('img/' + imgFilename);  // แสดงภาพจากคุกกี้
-
-    readPost();
-
-    // จัดการปุ่ม toProfile
-    const profileBtn = document.getElementById("toProfile");
-    if (profileBtn) {
-        profileBtn.onclick = toProfile; // เรียกฟังก์ชันเมื่อคลิก
-    }
+	document.getElementById("username").textContent = username;
+	console.log(getCookie('img'));
+	showImg('img/'+getCookie('img'));
+	readPost();
 }
-
 
 // Function to get new post data
 function getData() {
@@ -59,9 +45,9 @@ function getData() {
 }
 
 // Trigger the file upload dialog when the profile picture area is clicked
-function fileUpload() {
-    document.getElementById('fileField').click(); // เปิดหน้าต่างเลือกไฟล์เมื่อคลิกที่รูปโปรไฟล์
-}
+// function fileUpload() {
+//     document.getElementById('fileField').click();
+// }
 
 // Handle the file submission for uploading a profile picture
 async function fileSubmit() {
@@ -77,9 +63,9 @@ async function fileSubmit() {
         if (response.ok) {
             const result = await response.json();
             if (result.newImageFilename) {
-                // อัปเดตคุกกี้ด้วยชื่อไฟล์ใหม่
-                document.cookie = `img=${result.newImageFilename.split('/').pop()}; path=/`;  // เก็บแค่ชื่อไฟล์
-                showImg(result.newImageFilename);  // แสดงภาพใหม่
+                // Update the cookie with the new image filename (plain filename)
+                document.cookie = `img=${result.newImageFilename.split('/').pop()}; path=/`;  // Store just the filename, no '/img/'
+                showImg(result.newImageFilename); // Display the new image
                 console.log("Image uploaded and displayed!");
             } else {
                 console.error("No new image filename returned after upload.");
@@ -96,23 +82,23 @@ async function fileSubmit() {
 function showImg(filename) {
     if (filename !== "") {
         var showpic = document.getElementById('displayPic');
-        showpic.innerHTML = "";  // ล้างรูปก่อนหน้า
+        showpic.innerHTML = "";  // Clear previous image
         var temp = document.createElement("img");
-
-        // ตรวจสอบว่า filename มี '/img/' หรือไม่
+        
+        // Check if the filename includes "/img/" or not
         if (filename.startsWith('/img/')) {
-            temp.src = filename;  // ใช้เส้นทางโดยตรง
+            temp.src = filename;  // Use the path directly if it starts with '/img/'
         } else {
-            temp.src = `${filename}`;  // เติม '/img/' ถ้าไม่มี
+            temp.src = `/img/${filename}`;  // Otherwise prepend '/img/'
         }
 
-        temp.alt = "Profile Picture"; // เพิ่ม alt text สำหรับการเข้าถึง
-        temp.style.width = "100px";   // ขนาดรูป
-        temp.style.height = "100px";  // ขนาดรูป
-        temp.style.borderRadius = "50%"; // ทำให้เป็นวงกลม
-        showpic.appendChild(temp);    // เพิ่มรูปภาพในพื้นที่แสดง
+        temp.alt = "Profile Picture"; // Add alt text for accessibility
+        temp.style.width = "100px"; // Optional: set width
+        temp.style.height = "100px"; // Optional: set height
+        showpic.appendChild(temp); // Append the new image to the display area
     }
 }
+
 
 // Fetch posts from the server
 async function readPost() {
@@ -125,43 +111,46 @@ async function readPost() {
     }
 }
 
-function toProfile() {
-    window.location.href = "http://localhost:3000/profile.html"; // ไปที่หน้าประวัติส่วนตัวเมื่อคลิก
+function toProfile(){
+    
 }
 
 // Write a new post to the server
 async function writePost() {
     let newJson = JSON.stringify({
-        user: getCookie('username'),
-        message: document.getElementById('post-text').value
-    });
+		user: getCookie('username'),
+		message: document.getElementById('post-text').value
+	});
     console.log(document.getElementById('post-text').value);
     document.getElementById('post-text').value = '';
 
-    let response = await fetch("/writePost", {
-        method: "POST",
+	let response = await fetch("/writePost", {
+		method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: newJson,
-    });
+		body: newJson,
+	});
 
-    readPost();
+	readPost();
 }
 
 // Display posts in the feed
+
+//need REFACTOR
 async function showPost(data) {
+    
     var keys = Object.keys(data);
     var posts = document.getElementById("feed-posts");
     posts.innerHTML = "";  // Clear the previous posts
 
     let response = await fetch("/getlikedata");
-    let lovedata = await response.json();
+	let lovedata = await response.json()
     console.log("lovedata");
 
     for (var i = keys.length-1; i >=0 ; i--) {
-        let postID = data[keys[i]]["Post_ID"];
+		let postID = data[keys[i]]["Post_ID"];
         let post_owner = data[keys[i]]["username"];
     
         var temparticle = document.createElement("article");
@@ -189,21 +178,21 @@ async function showPost(data) {
 
         var tempdate = document.createElement("p");
         tempdate.className = "post-date";
-        let postDate = new Date(data[keys[i]]["post_date"]);
+        let postDate = new Date(data[keys[i]]["post_date"])
 
-        const localDate = new Date(postDate.getTime() - postDate.getTimezoneOffset() * 60000);
+		const localDate = new Date(postDate.getTime() - postDate.getTimezoneOffset() * 60000);
 
-        const formattedDate = localDate.toLocaleString('th-TH', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-        });
+		const formattedDate = localDate.toLocaleString('th-TH', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: false,
+		});
 
-        tempdate.innerHTML = (formattedDate);
-        tempheader.appendChild(tempdate);
+		tempdate.innerHTML = (formattedDate);
+		tempheader.appendChild(tempdate);
 
         var tempcontent = document.createElement("p");
         tempcontent.className = "post-text";
@@ -219,20 +208,25 @@ async function showPost(data) {
         tempLike.innerHTML = "👍" + "";
         tempFooter.appendChild(tempLike);
     }
+
+    
 }
 
 async function getImage(username){
-    let response = await fetch("/getAvatarImage", {
-        method: "POST",
+	let response = await fetch("/getAvatarImage", {
+		method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body:  JSON.stringify({
-            user: username,
-        }),
-    });
+		body:  JSON.stringify({
+			user: username,
+		}),
+	});
 
-    const data = await response.json(); 
+	const data = await response.json(); 
+	//console.log(data.avatarUrl);
     return data.avatarUrl; 
 }
+
+
