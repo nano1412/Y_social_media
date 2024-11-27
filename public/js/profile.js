@@ -27,6 +27,7 @@ function pageLoad() {
     console.log("in pageLoad");
 
     document.getElementById('displayPic').onclick = fileUpload;
+    document.getElementById('feed').onclick = toFeed;
     document.getElementById('logout').onclick = logout;
 
 
@@ -38,8 +39,11 @@ function pageLoad() {
     readPost();
 }
 
+function toFeed(){
+        window.location.href = "http://localhost:3000/feed.html";
+}
 function logout(){
-
+    console.log("logout");
 }
 
 // Function to get new post data

@@ -25,9 +25,9 @@ function getCookie(name) {
 // Page Load logic
 function pageLoad() {
     console.log("in pageLoad");
-    // document.getElementById('postbutton').onclick = getData;
 
-    // document.getElementById('displayPic').onclick = fileUpload;
+    document.getElementById('submit-post').onclick = writePost;
+    document.getElementById('displayPic').onclick = toProfile;
 
     var username = getCookie('username');
 
