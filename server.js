@@ -80,7 +80,6 @@ const queryDB = (sql) => {
 //     liked_id INT AUTO_INCREMENT PRIMARY KEY,
 //     post_id INT,
 //     like_username VARCHAR(255) ,
-//     content VARCHAR(1000),
 //     FOREIGN KEY (post_id) REFERENCES posts(post_id),
 //     FOREIGN KEY (like_username) REFERENCES users(username));
 
@@ -89,7 +88,7 @@ async function SetupTableOnDatabase() {
     let result = await queryDB(user);
     let post = "CREATE TABLE IF NOT EXISTS posts (post_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),content VARCHAR(1000),post_date TIMESTAMP,FOREIGN KEY (username) REFERENCES users(username))";
     result = await queryDB(post);
-    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,like_username VARCHAR(255) ,content VARCHAR(1000),FOREIGN KEY (post_id) REFERENCES posts(post_id),FOREIGN KEY (like_username) REFERENCES users(username))";
+    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,like_username VARCHAR(255) ,FOREIGN KEY (post_id) REFERENCES posts(post_id),FOREIGN KEY (like_username) REFERENCES users(username))";
     result = await queryDB(like_account);
 }
 
@@ -103,58 +102,20 @@ app.post('/regisDB', async (req, res) => {
 
     console.log(req.body);
 
-    // Validate password
-    if (req.body.password != req.body.RetypePassword) {
+    if(req.body.password != req.body.RetypePassword){
         return res.redirect('register.html?error=2');
     }
 
-    // Insert user into the database with default profile image
-    sql = `INSERT INTO users (username, password, Email, regis_date, profile_img) 
-           VALUES ("${req.body.username}", "${req.body.password}", "${req.body.email}", "${now_date}", "avatar.png")`;
+    sql = `INSERT INTO users (username, password,Email, regis_date ,profile_img) VALUES ("${req.body.username}", "${req.body.password}", "${req.body.email}","${now_date}","avatar.png")`;
     result = await queryDB(sql);
     console.log("New User added");
 
-    // Set cookies with username and the default image filename
     res.cookie('username', req.body.username);
-    res.cookie('img', "avatar.png");  // Default image for the new user
+    res.cookie('img', "avatar.png");
     console.log("set cookie");
-
-    res.end();
+    res.end;
     return res.redirect('feed.html');
-});
-
-app.get("/getLikeCount", async (req, res) => {
-    const { post_id } = req.query;
-
-    try {
-        // Count likes based on liked_id
-        const countQuery = `
-            SELECT COUNT(liked_id) AS like_count 
-            FROM like_accounts 
-            WHERE post_id = ${post_id}
-        `;
-        const result = await queryDB(countQuery);
-        res.json({ like_count: result[0].like_count });
-    } catch (err) {
-        console.error(`Error fetching like count for post ID ${post_id}:`, err);
-        res.status(500).send("Server error.");
-    }
-});
-
-// Get like count for a post
-app.get("/getLikeCount", async (req, res) => {
-    const { post_id } = req.query;
-
-    try {
-        const countQuery = `SELECT COUNT(*) AS like_count FROM like_accounts WHERE post_id = ${post_id}`;
-        const result = await queryDB(countQuery);
-        res.json({ like_count: result[0].like_count });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Server error.");
-    }
-});
-
+})
 
 app.post('/profilepic', (req, res) => {
     let upload = multer({ storage: storage, fileFilter: imageFilter }).single("avatar");
@@ -210,14 +171,14 @@ app.get('/readmyPost', async (req, res) => {
     res.json(result);
 })
 
-app.get('/getlikedata', async (req,res) => {
-    
-    let sql = `Select posts.post_id, count(like_accounts.liked_id) as count From like_accounts 
-    join posts on like_accounts.post_id = posts.post_id 
-    group by posts.post_id`;
+app.get('/getlikecount', async (req,res) => {
+    let postid = req.query.post_id;
+    // console.log("postid = " + postid);
+    let sql = `Select count(liked_id) as like_count From like_accounts where post_id = ${postid}`;
     result = await queryDB(sql);
     result = Object.assign({},result);
-    console.log(result);
+    // console.log("this post have like:");
+    // console.log(result);
     res.json(result);
 })
 
@@ -227,6 +188,23 @@ app.post('/writePost', async (req, res) => {
     result = await queryDB(sql);
     console.log("New post created successfully");
     res.send("create");
+})
+
+app.post('/likethispost', async (req, res) => {
+    sqlask = `select like_username from like_accounts where like_username = '${req.body.user}' AND post_id = '${req.body.postid}'limit 1`;
+    result = await queryDB(sqlask);
+    result = Object.assign({}, result);
+    if(Object.keys(result).length > 0){
+        sql = `DELETE FROM like_accounts WHERE like_username = '${req.body.user}' AND post_id = '${req.body.postid}'`;
+        result = await queryDB(sql);
+        console.log("this account already like this post, remove like from the post");
+        res.send("create");
+    } else {
+        sql = `INSERT INTO like_accounts (post_id,like_username) VALUES ("${req.body.postid}", "${req.body.user}")`;
+        result = await queryDB(sql);
+        console.log("New like created successfully");
+        res.send("create");
+    }
 })
 
 app.post('/checkLogin', async (req, res) => {
@@ -257,20 +235,13 @@ app.post('/checkLogin', async (req, res) => {
 
 //
 const getImage = async (username) => {
-    let sql = `Select username, profile_img From users`;
+    console.log(username);
+    let sql = `Select profile_img From users where username = '${username}'`;
     result = await queryDB(sql);
     result = Object.assign({}, result);
+    console.log(result[0]["profile_img"]);
 
-    let keys = Object.keys(result);
-
-    for (var i = 0; i < keys.length; i++) {
-        let find_username = result[keys[i]].username;
-        if (username == find_username) {
-            console.log("Return avatar: " + result[keys[i]].img);
-            return result[keys[i]].img;
-        };
-    }
-    return "avatar.png"
+    return result[0]["profile_img"];
 }
 
 const Login = (sendVal, data) => {

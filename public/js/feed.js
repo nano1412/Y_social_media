@@ -1,8 +1,8 @@
 // Check if the user is logged in based on cookies
 function checkCookie() {
-    var username = getCookie("username"); // Get the username cookie
+    var username = getCookie("username");  // Get the username cookie
     if (!username) {
-        window.location = "login.html"; // Redirect if no username cookie
+        window.location = "login.html";  // Redirect if no username cookie
     }
 }
 
@@ -15,181 +15,235 @@ window.onload = pageLoad;
 function getCookie(name) {
     var value = "";
     try {
-        value = document.cookie.split("; ").find(row => row.startsWith(name)).split('=')[1];
-        return value;
+        value = document.cookie.split("; ").find(row => row.startsWith(name)).split('=')[1]
+        return value
     } catch (err) {
-        return false;
+        return false
     }
 }
 
 // Page Load logic
 function pageLoad() {
     console.log("in pageLoad");
+    // document.getElementById('postbutton').onclick = getData;
 
-    var username = getCookie("username");
+    // document.getElementById('displayPic').onclick = fileUpload;
+
+    var username = getCookie('username');
+
     document.getElementById("username").textContent = username;
-
-    // Check and display the profile image from the cookie
-    var imgFilename = getCookie("img");
-    console.log("Image filename from cookie: " + imgFilename);
-
-    if (!imgFilename) {
-        imgFilename = "avatar.png"; // Default image if no img cookie
-        document.cookie = `img=${imgFilename}; path=/`; // Set default image cookie
-    }
-
-    showImg("img/" + imgFilename); // Display image from the cookie
-
+    console.log(getCookie('img'));
+    showImg(getCookie('img'));
     readPost();
+}
 
-    // Handle "Go to Profile" button
-    const profileBtn = document.getElementById("toProfile");
-    if (profileBtn) {
-        profileBtn.onclick = toProfile; // Navigate to the profile page when clicked
+// Function to get new post data
+function getData() {
+    var msg = document.getElementById("textmsg").value;
+    document.getElementById("textmsg").value = "";  // Clear the input field
+    writePost(msg);  // Write new post to the server
+}
+
+// Trigger the file upload dialog when the profile picture area is clicked
+// function fileUpload() {
+//     document.getElementById('fileField').click();
+// }
+
+// Handle the file submission for uploading a profile picture
+async function fileSubmit() {
+    const formData = new FormData(document.getElementById('formId'));
+    formData.append('isAvatarUpload', 'true');
+
+    try {
+        let response = await fetch('/profilepic', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            if (result.newImageFilename) {
+                // Update the cookie with the new image filename (plain filename)
+                document.cookie = `img=${result.newImageFilename.split('/').pop()}; path=/`;  // Store just the filename, no '/img/'
+                showImg(result.newImageFilename); // Display the new image
+                console.log("Image uploaded and displayed!");
+            } else {
+                console.error("No new image filename returned after upload.");
+            }
+        } else {
+            console.error("Error uploading image:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error during file submission:", error);
     }
 }
 
-// Display profile picture
+// Function to display the profile picture in the specified area
 function showImg(filename) {
     if (filename !== "") {
-        var showpic = document.getElementById("displayPic");
-        showpic.innerHTML = ""; // Clear any previous content
+        var showpic = document.getElementById('displayPic');
+        showpic.innerHTML = "";  // Clear previous image
         var temp = document.createElement("img");
-        temp.src = filename.startsWith("/img/") ? filename : `/img/${filename}`;
-        temp.alt = "Profile Picture";
-        temp.style.width = "100px";
-        temp.style.height = "100px";
-        temp.style.borderRadius = "50%"; // Circular image
-        showpic.appendChild(temp);
+
+        // Check if the filename includes "/img/" or not
+        if (filename.startsWith('/img/')) {
+            temp.src = filename;  // Use the path directly if it starts with '/img/'
+        } else {
+            temp.src = `/img/${filename}`;  // Otherwise prepend '/img/'
+        }
+
+        temp.alt = "Profile Picture"; // Add alt text for accessibility
+        temp.style.width = "100px"; // Optional: set width
+        temp.style.height = "100px"; // Optional: set height
+        showpic.appendChild(temp); // Append the new image to the display area
     }
 }
+
 
 // Fetch posts from the server
 async function readPost() {
     try {
-        let response = await fetch("/readPost");
+        let response = await fetch('/readPost');
         let data = await response.json();
-        showPost(data); // Display posts
+        showPost(data);  // Display the posts after fetching
     } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error('Error fetching posts:', error);
     }
-}
-
-// Handle the "like" button click
-async function likePost(postId) {
-    const username = getCookie("username");
-
-    try {
-        const response = await fetch("/likePost", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                post_id: postId,
-                username: username,
-            }),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const likeButton = document.getElementById(`like-button-${postId}`);
-            likeButton.innerHTML = `👍 ${data.like_count}`; // Update the like count
-        } else {
-            console.error("Failed to like the post.");
-        }
-    } catch (error) {
-        console.error("Error liking post:", error);
-    }
-}
-
-// Display posts and add the like button
-async function showPost(data) {
-    const keys = Object.keys(data);
-    const posts = document.getElementById("feed-posts");
-    posts.innerHTML = ""; // Clear previous posts
-
-    for (let i = keys.length - 1; i >= 0; i--) {
-        const post = data[keys[i]];
-        const postID = post.post_id;
-
-        const tempArticle = document.createElement("article");
-        tempArticle.className = "feed-post";
-        posts.appendChild(tempArticle);
-
-        // User profile image
-        const tempImg = document.createElement("img");
-        tempImg.id = "postProfile";
-        tempImg.src = `img/${await getImage(post.username)}`;
-        tempImg.alt = post.username;
-        tempArticle.appendChild(tempImg);
-
-        // Post content container
-        const tempContainer = document.createElement("div");
-        tempContainer.className = "post-content";
-        tempArticle.appendChild(tempContainer);
-
-        // Post header
-        const tempHeader = document.createElement("header");
-        tempHeader.className = "post-header";
-        tempContainer.appendChild(tempHeader);
-
-        const tempPostOwner = document.createElement("h2");
-        tempPostOwner.className = "post-author";
-        tempPostOwner.textContent = post.username;
-        tempHeader.appendChild(tempPostOwner);
-
-        const tempDate = document.createElement("p");
-        tempDate.className = "post-date";
-        tempDate.textContent = new Date(post.post_date).toLocaleString();
-        tempHeader.appendChild(tempDate);
-
-        // Post text
-        const tempContent = document.createElement("p");
-        tempContent.className = "post-text";
-        tempContent.textContent = post.content;
-        tempContainer.appendChild(tempContent);
-
-        // Post actions (like button)
-        const tempFooter = document.createElement("footer");
-        tempFooter.className = "post-actions";
-        tempContainer.appendChild(tempFooter);
-
-        const tempLike = document.createElement("button");
-        tempLike.id = `like-button-${postID}`;
-        tempLike.ariaLabel = "Like Post";
-
-        // Fetch the initial like count
-        try {
-            const likeCountResponse = await fetch(`/getLikeCount?post_id=${postID}`);
-            const likeCountData = await likeCountResponse.json();
-            tempLike.innerHTML = `👍 ${likeCountData.like_count || 0}`; // Ensure 0 is shown if no likes
-        } catch (error) {
-            console.error(`Error fetching like count for post ID ${postID}:`, error);
-            tempLike.innerHTML = "👍 0"; // Fallback to 0 likes
-        }
-
-        tempLike.onclick = () => likePost(postID); // Attach click event
-        tempFooter.appendChild(tempLike);
-    }
-}
-
-
-
-// Fetch user profile image
-async function getImage(username) {
-    const response = await fetch("/getAvatarImage", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user: username }),
-    });
-
-    const data = await response.json();
-    return data.avatarUrl || "avatar.png";
 }
 
 function toProfile() {
     window.location.href = "http://localhost:3000/profile.html";
 }
+
+// Write a new post to the server
+async function writePost() {
+    let newJson = JSON.stringify({
+        user: getCookie('username'),
+        message: document.getElementById('post-text').value
+    });
+    console.log(document.getElementById('post-text').value);
+    document.getElementById('post-text').value = '';
+
+    let response = await fetch("/writePost", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: newJson,
+    });
+
+    readPost();
+}
+
+// Display posts in the feed
+
+//need REFACTOR
+async function showPost(data) {
+
+    var keys = Object.keys(data);
+    var posts = document.getElementById("feed-posts");
+    posts.innerHTML = "";  // Clear the previous posts
+
+
+    for (var i = keys.length - 1; i >= 0; i--) {
+        let postID = data[keys[i]]["post_id"];
+        let post_owner = data[keys[i]]["username"];
+
+        var temparticle = document.createElement("article");
+        temparticle.className = "feed-post";
+        posts.appendChild(temparticle);
+
+        var tempcontainer = document.createElement("div");
+        tempcontainer.className = "post-content";
+        temparticle.appendChild(tempcontainer);
+
+        var tempheader = document.createElement("header");
+        tempheader.className = "post-header";
+        tempcontainer.appendChild(tempheader);
+
+        var tempPostOwner = document.createElement("h2");
+        tempPostOwner.className = "post-author";
+        tempPostOwner.innerHTML = post_owner;
+        tempheader.appendChild(tempPostOwner);
+
+        var tempdate = document.createElement("p");
+        tempdate.className = "post-date";
+        let postDate = new Date(data[keys[i]]["post_date"])
+
+        const localDate = new Date(postDate.getTime() - postDate.getTimezoneOffset() * 60000);
+
+        const formattedDate = localDate.toLocaleString('th-TH', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        });
+
+        tempdate.innerHTML = (formattedDate);
+        tempheader.appendChild(tempdate);
+
+        var tempcontent = document.createElement("p");
+        tempcontent.className = "post-text";
+        tempcontent.innerHTML = data[keys[i]]["content"];
+        tempcontainer.appendChild(tempcontent);
+
+        var tempFooter = document.createElement("footer");
+        tempFooter.className = "post-actions";
+        tempcontainer.appendChild(tempFooter);
+
+        var likecount = await getlikecount(data[keys[i]]["post_id"]);
+        var tempLike = document.createElement("button");
+        tempLike.ariaLabel = "Like Post";
+        tempLike.onclick = function () { likethispost(getCookie("username"), postID); };
+        tempLike.innerHTML = "👍 " + JSON.stringify(likecount);
+        tempFooter.appendChild(tempLike);
+    }
+
+
+}
+
+async function getlikecount(postid) {
+    // console.log("postid");
+    // console.log(postid);
+    let response = await fetch(`/getlikecount?post_id=${postid}`);
+    let data = await response.json();
+    // console.log(data[0]["like_count"]);
+    return data[0]["like_count"];
+}
+
+async function likethispost(username, postid) {
+    let response = await fetch("/likethispost", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: username,
+            postid: postid
+        }),
+    });
+    readPost();
+}
+
+async function getImage(username) {
+    let response = await fetch("/getAvatarImage", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: username,
+        }),
+    });
+
+    const data = await response.json();
+    //console.log(data.avatarUrl);
+    return data.avatarUrl;
+}
+
+

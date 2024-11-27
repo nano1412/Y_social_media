@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="css/profile.css">
   <script type="text/javascript" src="js/profile.js"></script>
 </head>
+
 <body>
   <div class="profile-page">
     <div class="header">
@@ -16,21 +18,33 @@
       <form action="/profilepic" method="post" id="formId" enctype="multipart/form-data">
         <input type="file" id="fileField" name="avatar" hidden>
       </form>
-    
 
       <div class="profile-info">
-        <h1>Name</h1>
-        <p>Member Since DD/MM/YYYY</p>
+        <h1 id="username">Name</h1>
+        <button id = "feed">back to feed</button>
+        <button id = "logout">logout</button>
         <a href="#" class="logout-btn" id="logout">Log Out</a>
-        <!-- New Go to Feed Button -->
-        <a href="#" class="feedbtn" id="feed">Go to Feed</a>
       </div>
-    </div>
 
-    <div class="posts">
-      <!-- Your posts here -->
+    </div>
+    <div id="posts">
+      <article class="feed-post">
+        <img id = "postProfile" src="img/avatar.png" alt="">
+        <div class="post-content">
+          <header class="post-header">
+            <h2 class="post-author">Name</h2>
+            <p class="post-date">DD/MM/YYYY</p>
+          </header>
+          <p class="post-text">Lorem ipsum dolor sit amet consectetur. Eget volutpat lobortis eget et id fames nulla
+            interdum.</p>
+          <footer class="post-actions">
+            <button aria-label="Like Post">👍</button>
+            <button aria-label="comment Post">💬</button>
+          </footer>
+        </div>
 
     </div>
   </div>
 </body>
+
 </html>
