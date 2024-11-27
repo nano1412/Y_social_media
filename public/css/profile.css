@@ -175,4 +175,27 @@ body {
   display: inline-block; /* ป้องกันไม่ให้จัดตำแหน่ง block */
 }
 
+/* Styling for the 'Back to Feed' and 'Logout' buttons */
+#feed, #logout {
+  background-color: #ff8c00; /* Bright orange */
+  color: white; /* White text */
+  border: none; /* Remove default border */
+  padding: 10px 15px; /* Add padding for comfortable click area */
+  margin: 5px; /* Space between buttons */
+  font-size: 16px; /* Text size */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth color transition on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+#feed:hover, #logout:hover {
+  background-color: #ffb74d; /* Lighter orange on hover */
+}
+
+/* Optional: Add a focus style for accessibility */
+#feed:focus, #logout:focus {
+  outline: 2px solid #ffa500; /* Outline for focus state */
+  outline-offset: 2px;
+}
 
