@@ -1,176 +1,178 @@
 /* Main layout from stylefeed.css */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #3c0264; /* Dark purple */
-    color: white;
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-rows: auto auto 1fr;
-    grid-gap: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .item1, .item2, .item3 {
-    padding: 10px;
-    background-color: #53217a; /* Slightly lighter purple */
-    border-radius: 10px;
-  }
-  
-  .item2 a {
-    color: #ff8c00;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  #posting textarea {
-    width: 100%;
-    border-radius: 5px;
-    padding: 10px;
-  }
-  
-  #postbutton {
-    background-color: #ff8c00;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
-  #postbutton:hover {
-    background-color: #ffb74d;
-  }
-  
-  /* Profile section styles from styles.css */
-  .profile-page {
-    background-color: #6a28a4; /* Lighter purple for posts */
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .header {
-    display: flex;
-    align-items: center; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
-    justify-content: start; /* จัดให้อยู่ฝั่งซ้าย */
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #3c0264; /* Dark purple */
+  color: white;
 }
 
-  
-  .profile-pic {
-    width: 80px;
-    height: 80px;
-    background-color: red;
-    border-radius: 50%;
-    margin-right: 15px;
-  }
-  
-  .profile-info h1 {
-    margin: 0;
-    font-size: 24px;
-  }
-  
-  #posts {
-    margin-top: 20px;
-  }
-  
-  .post {
-    display: flex;
-    margin-bottom: 20px;
-    background-color: #53217a;
-    border-radius: 10px;
-    padding: 15px;
-  }
-  
-  .post-pic {
-    width: 50px;
-    height: 50px;
-    background-color: red;
-    border-radius: 50%;
-    margin-right: 15px;
-  }
-  
-  .post-actions button {
-    background-color: #ff8c00;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    margin-right: 5px;
-    border-radius: 5px;
-  }
-  
-  .post-actions button:hover {
-    background-color: #ffb74d;
-  }
-  
-  /* Floating Action Button (FAB) */
-  .fab {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background-color: #ff8c00; /* Orange color */
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-  }
-  
-  .fab:hover {
-    background-color: #ffb74d; /* Light orange when hovered */
-  }
-  
-  /* Style for post number badge */
-  .post-number {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ff8c00; /* Orange color */
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px; /* Optional: Change to 50% for a circle */
-    margin-right: 15px; /* Spacing between badge and post content */
-  }
-    
-  /* Updated feed-post layout to include the badge */
-  .feed-post {
-    display: flex;
-    align-items: flex-start;
-    background-color: #480080;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-    
-  .post-content {
-    flex: 1; /* Take up remaining space */
-  }
-
-  #displayPic img {
-    width: 100%; /* ปรับให้สัมพันธ์กับ container */
-    height: auto; /* รักษาอัตราส่วน */
-    border-radius: inherit; /* สืบทอดมุมโค้งจาก #displayPic */
+.grid-container {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  grid-gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-  #displayPic {
-    width: 80px; /* กำหนดขนาดแน่นอน */
-    height: 80px; /* กำหนดความสูง */
-    border-radius: 50%; /* ทำให้เป็นวงกลม */
-    margin: 0; /* ไม่ให้มีการจัดตำแหน่งกลาง */
-    display: inline-block; /* ป้องกันไม่ให้จัดตำแหน่ง block */
+.item1, .item2, .item3 {
+  padding: 10px;
+  background-color: #53217a; /* Slightly lighter purple */
+  border-radius: 10px;
+}
+
+.item2 a {
+  color: #ff8c00;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#posting textarea {
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+#postbutton {
+  background-color: #ff8c00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#postbutton:hover {
+  background-color: #ffb74d;
+}
+
+/* Profile section styles from styles.css */
+.profile-page {
+  background-color: #6a28a4; /* Lighter purple for posts */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.header {
+  display: flex;
+  align-items: center; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+  justify-content: start; /* จัดให้อยู่ฝั่งซ้าย */
+}
+
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.profile-info h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+#posts {
+  margin-top: 20px;
+}
+
+.post {
+  display: flex;
+  margin-bottom: 20px;
+  background-color: #53217a;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.post-pic {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.post-actions button {
+  background-color: #ff8c00;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+}
+
+.post-actions button:hover {
+  background-color: #ffb74d;
+}
+
+/* Floating Action Button (FAB) */
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #ff8c00; /* Orange color */
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.fab:hover {
+  background-color: #ffb74d; /* Light orange when hovered */
+}
+
+/* Style for post number badge */
+.post-number {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff8c00; /* Orange color */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px; /* Optional: Change to 50% for a circle */
+  margin-right: 15px; /* Spacing between badge and post content */
+}
+  
+/* Updated feed-post layout to include the badge */
+.feed-post {
+  display: flex;
+  align-items: flex-start;
+  background-color: #480080;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+  
+.post-content {
+  flex: 1; /* Take up remaining space */
+}
+
+#displayPic img {
+  width: 100%; /* ปรับให้สัมพันธ์กับ container */
+  height: auto; /* รักษาอัตราส่วน */
+  border-radius: inherit; /* สืบทอดมุมโค้งจาก #displayPic */
+}
+
+#displayPic {
+  padding-right: 50px;
+  padding-bottom: 20px;
+  width: 80px; /* กำหนดขนาดแน่นอน */
+  height: 80px; /* กำหนดความสูง */
+  border-radius: 50%; /* ทำให้เป็นวงกลม */
+  margin: 0; /* ไม่ให้มีการจัดตำแหน่งกลาง */
+  display: inline-block; /* ป้องกันไม่ให้จัดตำแหน่ง block */
 }
 
 
