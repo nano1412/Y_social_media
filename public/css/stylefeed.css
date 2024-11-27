@@ -13,18 +13,15 @@
 	max-width: 800px; /* Set a maximum width */
 	padding-top: 20px;
 	text-align: center;
-	background-color: #3c0264; /* Dark purple for the background */
 	padding: 20px;
 	border-radius: 10px;
   }
   
   /* Individual Post Styling */
   .feed-post {
-	background-color: #53217a; /* Slightly lighter purple for the post background */
 	padding: 20px;
 	margin-bottom: 20px; /* Space between posts */
 	border-radius: 10px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for the post */
 	display: flex;
 	align-items: flex-start;
   }
@@ -147,6 +144,50 @@ body {
     display: block; /* Ensure it behaves like a block element */
 }
 
+#postbox {
+	margin: auto; /* Center the postbox horizontally */
+	width: 100%; /* Make it responsive */
+	max-width: 600px; /* Set a maximum width */
+	padding: 20px; /* Add padding inside */
+	background-color: #3c0264; /* Dark purple background */
+	border: 2px solid #4c1b71; /* Add a border with a darker shade */
+	border-radius: 10px; /* Rounded corners */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+	display: flex;
+	flex-direction: column;
+	gap: 15px; /* Space between elements inside */
+	box-sizing: border-box; /* Ensure padding doesn't affect width */
+  }
+  
+  /* Styling for Textarea */
+  #postbox textarea {
+	height: 120px; /* Fixed height */
+	border-radius: 5px; /* Slightly rounded corners */
+	border: 1px solid #a684c4; /* Light purple border */
+	padding: 10px; /* Space inside textarea */
+	background-color: #3c0264; /* Match postbox background */
+	color: white; /* Text color */
+	resize: none; /* Disable resizing */
+	font-family: Arial, sans-serif; /* Font for consistency */
+	font-size: 16px; /* Comfortable reading size */
+  }
+  
+  /* Styling for Submit Button */
+  #postbox button {
+	align-self: flex-end; /* Align the button to the right */
+	background-color: #ff8c00; /* Bright orange button */
+	border: none; /* No border */
+	color: white; /* White text */
+	padding: 10px 15px; /* Comfortable padding */
+	border-radius: 5px; /* Rounded corners */
+	cursor: pointer; /* Pointer cursor for interaction */
+	transition: background-color 0.3s ease; /* Smooth hover effect */
+  }
+  
+  #postbox button:hover {
+	background-color: #ffb74d; /* Lighter orange when hovered */
+  }
+  
 
 /*#postbox {
 	position: fixed;
@@ -164,7 +205,7 @@ body {
 	flex-direction: column;
 	gap: 10px;
 	box-sizing: border-box; /* Ensures padding doesn't affect width 
-}*/
+}
 
 /*#postbox textarea {
 	width: 100%;
