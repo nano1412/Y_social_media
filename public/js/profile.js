@@ -43,7 +43,7 @@ function toFeed(){
         window.location.href = "http://localhost:3000/feed.html";
 }
 function logout(){
-    console.log("logout");
+    window.location.href = "http://localhost:3000/logout";
 }
 
 // Function to get new post data
