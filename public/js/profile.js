@@ -63,7 +63,6 @@ function fileUpload() {
 async function fileSubmit() {
     console.log("summit new profile image");
     const formData = new FormData(document.getElementById('formId'));
-    console.log(typeof(formData));
     formData.append('isAvatarUpload', 'true');
 
     try {
@@ -88,6 +87,7 @@ async function fileSubmit() {
     } catch (error) {
         console.error("Error during file submission:", error);
     }
+    window.location.reload();
 }
 
 // Function to display the profile picture in the specified area
