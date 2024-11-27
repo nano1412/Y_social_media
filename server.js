@@ -196,26 +196,26 @@ app.post('/likethispost', async (req, res) => {
     result = await queryDB(sqlask);
     console.log(result);
     
-    let keys = Object.keys(data);
+    // let keys = Object.keys(data);
 
-            let correctly = false;
+    //         let correctly = false;
 
-            for (var i = 0; i < keys.length; i++) {
-                let username = data[keys[i]].username;
-                let password = data[keys[i]].password;
+    //         for (var i = 0; i < keys.length; i++) {
+    //             let username = data[keys[i]].username;
+    //             let password = data[keys[i]].password;
 
-                if (sendVal.username == username && sendVal.password == password) {
-                    correctly = true;
-                };
-            }
+    //             if (sendVal.username == username && sendVal.password == password) {
+    //                 correctly = true;
+    //             };
+    //         }
 
-            if (correctly) {
-                console.log("correct password & username!");
-                resolve(true);
-            } else {
-                console.log("incorrect password & username!");
-                resolve(false);
-            }
+    //         if (correctly) {
+    //             console.log("correct password & username!");
+    //             resolve(true);
+    //         } else {
+    //             console.log("incorrect password & username!");
+    //             resolve(false);
+    //         }
 
     sql = `INSERT INTO like_accounts (post_id,like_username) VALUES ("${req.body.postid}", "${req.body.user}")`;
     result = await queryDB(sql);
