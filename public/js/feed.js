@@ -112,7 +112,7 @@ async function readPost() {
 }
 
 function toProfile() {
-
+    window.location.href = "http://localhost:3000/profile.html";
 }
 
 // Write a new post to the server
