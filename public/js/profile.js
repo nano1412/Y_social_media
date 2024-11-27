@@ -35,7 +35,6 @@ function pageLoad() {
     var username = getCookie('username');
 
     document.getElementById("username").textContent = username;
-    console.log(getCookie('img'));
     showImg(getCookie('img'));
     readPost();
 }
@@ -45,13 +44,6 @@ function toFeed(){
 }
 function logout(){
     window.location.href = "http://localhost:3000/logout";
-}
-
-// Function to get new post data
-function getData() {
-    var msg = document.getElementById("textmsg").value;
-    document.getElementById("textmsg").value = "";  // Clear the input field
-    writePost(msg);  // Write new post to the server
 }
 
 // Trigger the file upload dialog when the profile picture area is clicked
@@ -123,34 +115,6 @@ async function readPost() {
     }
 }
 
-function toProfile() {
-    window.location.href = "http://localhost:3000/profile.html";
-}
-
-// Write a new post to the server
-// async function writePost() {
-//     let newJson = JSON.stringify({
-//         user: getCookie('username'),
-//         message: document.getElementById('post-text').value
-//     });
-//     console.log(document.getElementById('post-text').value);
-//     document.getElementById('post-text').value = '';
-
-//     let response = await fetch("/writePost", {
-//         method: "POST",
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json'
-//         },
-//         body: newJson,
-//     });
-
-//     readPost();
-// }
-
-// Display posts in the feed
-
-//need REFACTOR
 async function showPost(data) {
 
     var keys = Object.keys(data);
@@ -222,28 +186,25 @@ async function showPost(data) {
 }
 
 async function getlikecount(postid) {
-    // console.log("postid");
-    // console.log(postid);
     let response = await fetch(`/getlikecount?post_id=${postid}`);
     let data = await response.json();
-    // console.log(data[0]["like_count"]);
     return data[0]["like_count"];
 }
 
-async function likethispost(username, postid) {
-    let response = await fetch("/likethispost", {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            user: username,
-            postid: postid
-        }),
-    });
-    readPost();
-}
+// async function likethispost(username, postid) {
+//     let response = await fetch("/likethispost", {
+//         method: "POST",
+//         headers: {
+//             'Accept': 'application/json',
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             user: username,
+//             postid: postid
+//         }),
+//     });
+//     readPost();
+// }
 
 async function getImage(username) {
     let response = await fetch("/getAvatarImage", {
@@ -258,7 +219,6 @@ async function getImage(username) {
     });
 
     const data = await response.json();
-    //console.log(data.avatarUrl);
     return data.avatarUrl;
 }
 

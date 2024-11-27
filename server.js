@@ -173,12 +173,9 @@ app.get('/readmyPost', async (req, res) => {
 
 app.get('/getlikecount', async (req,res) => {
     let postid = req.query.post_id;
-    // console.log("postid = " + postid);
     let sql = `Select count(liked_id) as like_count From like_accounts where post_id = ${postid}`;
     result = await queryDB(sql);
     result = Object.assign({},result);
-    // console.log("this post have like:");
-    // console.log(result);
     res.json(result);
 })
 
@@ -235,11 +232,9 @@ app.post('/checkLogin', async (req, res) => {
 
 //
 const getImage = async (username) => {
-    console.log(username);
     let sql = `Select profile_img From users where username = '${username}'`;
     result = await queryDB(sql);
     result = Object.assign({}, result);
-    console.log(result[0]["profile_img"]);
 
     return result[0]["profile_img"];
 }

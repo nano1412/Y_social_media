@@ -32,7 +32,6 @@ function pageLoad() {
     var username = getCookie('username');
 
     document.getElementById("username").textContent = username;
-    console.log(getCookie('img'));
     showImg(getCookie('img'));
     readPost();
 }
@@ -43,11 +42,6 @@ function getData() {
     document.getElementById("textmsg").value = "";  // Clear the input field
     writePost(msg);  // Write new post to the server
 }
-
-// Trigger the file upload dialog when the profile picture area is clicked
-// function fileUpload() {
-//     document.getElementById('fileField').click();
-// }
 
 // Handle the file submission for uploading a profile picture
 async function fileSubmit() {
@@ -121,7 +115,6 @@ async function writePost() {
         user: getCookie('username'),
         message: document.getElementById('post-text').value
     });
-    console.log(document.getElementById('post-text').value);
     document.getElementById('post-text').value = '';
 
     let response = await fetch("/writePost", {
@@ -206,11 +199,8 @@ async function showPost(data) {
 }
 
 async function getlikecount(postid) {
-    // console.log("postid");
-    // console.log(postid);
     let response = await fetch(`/getlikecount?post_id=${postid}`);
     let data = await response.json();
-    // console.log(data[0]["like_count"]);
     return data[0]["like_count"];
 }
 
@@ -242,7 +232,6 @@ async function getImage(username) {
     });
 
     const data = await response.json();
-    //console.log(data.avatarUrl);
     return data.avatarUrl;
 }
 
