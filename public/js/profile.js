@@ -159,6 +159,10 @@ async function showPost(data) {
         let postID = data[keys[i]]["post_id"];
         let post_owner = data[keys[i]]["username"];
 
+        if(getCookie("username") != post_owner){
+            continue
+        }
+
         var temparticle = document.createElement("article");
         temparticle.className = "feed-post";
         posts.appendChild(temparticle);
