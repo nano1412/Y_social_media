@@ -2,9 +2,14 @@
 	display: flex;
 }
 
-#displayPic img{
-	/* height: 50%; */
+#displayPic img {
+    width: 100px; /* Adjust the size as needed */
+    height: 100px; /* Ensures it's a square for the circle effect */
+    border-radius: 50%; /* Makes it circular */
+    object-fit: cover; /* Ensures the image fits well within the circle */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
 }
+
 
 /* Feed Posts Section */
 #feed-posts {
