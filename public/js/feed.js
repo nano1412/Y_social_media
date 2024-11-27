@@ -25,9 +25,9 @@ function getCookie(name) {
 // Page Load logic
 function pageLoad() {
     console.log("in pageLoad");
-    // document.getElementById('postbutton').onclick = getData;
 
-    // document.getElementById('displayPic').onclick = fileUpload;
+    document.getElementById('submit-post').onclick = writePost;
+    document.getElementById('displayPic').onclick = toProfile;
 
     var username = getCookie('username');
 
@@ -149,6 +149,10 @@ async function showPost(data) {
     for (var i = keys.length - 1; i >= 0; i--) {
         let postID = data[keys[i]]["post_id"];
         let post_owner = data[keys[i]]["username"];
+
+        if(getCookie("username") != post_owner){
+            continue
+        }
 
         var temparticle = document.createElement("article");
         temparticle.className = "feed-post";
