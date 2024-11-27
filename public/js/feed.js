@@ -12,14 +12,14 @@ checkCookie();
 window.onload = pageLoad;
 
 // Helper function to get cookies
-function getCookie(name){
-	var value = "";
-	try{
-		value = document.cookie.split("; ").find(row => row.startsWith(name)).split('=')[1]
-		return value
-	}catch(err){
-		return false
-	} 
+function getCookie(name) {
+    var value = "";
+    try {
+        value = document.cookie.split("; ").find(row => row.startsWith(name)).split('=')[1]
+        return value
+    } catch (err) {
+        return false
+    }
 }
 
 // Page Load logic
@@ -27,14 +27,14 @@ function pageLoad() {
     console.log("in pageLoad");
     // document.getElementById('postbutton').onclick = getData;
 
-	// document.getElementById('displayPic').onclick = fileUpload;
-	
-	var username = getCookie('username');
+    // document.getElementById('displayPic').onclick = fileUpload;
 
-	document.getElementById("username").textContent = username;
-	console.log(getCookie('img'));
-	showImg('img/'+getCookie('img'));
-	readPost();
+    var username = getCookie('username');
+
+    document.getElementById("username").textContent = username;
+    console.log(getCookie('img'));
+    showImg(getCookie('img'));
+    readPost();
 }
 
 // Function to get new post data
@@ -84,7 +84,7 @@ function showImg(filename) {
         var showpic = document.getElementById('displayPic');
         showpic.innerHTML = "";  // Clear previous image
         var temp = document.createElement("img");
-        
+
         // Check if the filename includes "/img/" or not
         if (filename.startsWith('/img/')) {
             temp.src = filename;  // Use the path directly if it starts with '/img/'
@@ -111,48 +111,45 @@ async function readPost() {
     }
 }
 
-function toProfile(){
-    
+function toProfile() {
+
 }
 
 // Write a new post to the server
 async function writePost() {
     let newJson = JSON.stringify({
-		user: getCookie('username'),
-		message: document.getElementById('post-text').value
-	});
+        user: getCookie('username'),
+        message: document.getElementById('post-text').value
+    });
     console.log(document.getElementById('post-text').value);
     document.getElementById('post-text').value = '';
 
-	let response = await fetch("/writePost", {
-		method: "POST",
+    let response = await fetch("/writePost", {
+        method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-		body: newJson,
-	});
+        body: newJson,
+    });
 
-	readPost();
+    readPost();
 }
 
 // Display posts in the feed
 
 //need REFACTOR
 async function showPost(data) {
-    
+
     var keys = Object.keys(data);
     var posts = document.getElementById("feed-posts");
     posts.innerHTML = "";  // Clear the previous posts
 
-    let response = await fetch("/getlikedata");
-	let lovedata = await response.json()
-    console.log("lovedata");
 
-    for (var i = keys.length-1; i >=0 ; i--) {
-		let postID = data[keys[i]]["post_id"];
+    for (var i = keys.length - 1; i >= 0; i--) {
+        let postID = data[keys[i]]["post_id"];
         let post_owner = data[keys[i]]["username"];
-    
+
         var temparticle = document.createElement("article");
         temparticle.className = "feed-post";
         posts.appendChild(temparticle);
@@ -174,19 +171,19 @@ async function showPost(data) {
         tempdate.className = "post-date";
         let postDate = new Date(data[keys[i]]["post_date"])
 
-		const localDate = new Date(postDate.getTime() - postDate.getTimezoneOffset() * 60000);
+        const localDate = new Date(postDate.getTime() - postDate.getTimezoneOffset() * 60000);
 
-		const formattedDate = localDate.toLocaleString('th-TH', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit',
-			hour12: false,
-		});
+        const formattedDate = localDate.toLocaleString('th-TH', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        });
 
-		tempdate.innerHTML = (formattedDate);
-		tempheader.appendChild(tempdate);
+        tempdate.innerHTML = (formattedDate);
+        tempheader.appendChild(tempdate);
 
         var tempcontent = document.createElement("p");
         tempcontent.className = "post-text";
@@ -197,45 +194,56 @@ async function showPost(data) {
         tempFooter.className = "post-actions";
         tempcontainer.appendChild(tempFooter);
 
+        var likecount = await getlikecount(data[keys[i]]["post_id"]);
         var tempLike = document.createElement("button");
         tempLike.ariaLabel = "Like Post";
-        tempLike.onclick = function() {likethispost(getCookie("username"),postID);};
-        tempLike.innerHTML = "👍" + "";
+        tempLike.onclick = function () { likethispost(getCookie("username"), postID); };
+        tempLike.innerHTML = "👍 " + JSON.stringify(likecount);
         tempFooter.appendChild(tempLike);
     }
 
-    
+
+}
+
+async function getlikecount(postid) {
+    // console.log("postid");
+    // console.log(postid);
+    let response = await fetch(`/getlikecount?post_id=${postid}`);
+    let data = await response.json();
+    // console.log(data[0]["like_count"]);
+    return data[0]["like_count"];
 }
 
 async function likethispost(username, postid) {
     let response = await fetch("/likethispost", {
-		method: "POST",
+        method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-		body:  JSON.stringify({
-			user: username,
+        body: JSON.stringify({
+            user: username,
             postid: postid
-		}),
-	});
+        }),
+    });
+    readPost();
 }
 
-async function getImage(username){
-	let response = await fetch("/getAvatarImage", {
-		method: "POST",
+async function getImage(username) {
+    let response = await fetch("/getAvatarImage", {
+        method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-		body:  JSON.stringify({
-			user: username,
-		}),
-	});
+        body: JSON.stringify({
+            user: username,
+        }),
+    });
 
-	const data = await response.json(); 
-	//console.log(data.avatarUrl);
-    return data.avatarUrl; 
+    const data = await response.json();
+    //console.log(data.avatarUrl);
+    return data.avatarUrl;
 }
 
 

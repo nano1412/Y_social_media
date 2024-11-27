@@ -80,7 +80,6 @@ const queryDB = (sql) => {
 //     liked_id INT AUTO_INCREMENT PRIMARY KEY,
 //     post_id INT,
 //     like_username VARCHAR(255) ,
-//     content VARCHAR(1000),
 //     FOREIGN KEY (post_id) REFERENCES posts(post_id),
 //     FOREIGN KEY (like_username) REFERENCES users(username));
 
@@ -89,7 +88,7 @@ async function SetupTableOnDatabase() {
     let result = await queryDB(user);
     let post = "CREATE TABLE IF NOT EXISTS posts (post_id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),content VARCHAR(1000),post_date TIMESTAMP,FOREIGN KEY (username) REFERENCES users(username))";
     result = await queryDB(post);
-    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,like_username VARCHAR(255) ,content VARCHAR(1000),FOREIGN KEY (post_id) REFERENCES posts(post_id),FOREIGN KEY (like_username) REFERENCES users(username))";
+    let like_account = "CREATE TABLE IF NOT EXISTS like_accounts (liked_id INT AUTO_INCREMENT PRIMARY KEY,post_id INT,like_username VARCHAR(255) ,FOREIGN KEY (post_id) REFERENCES posts(post_id),FOREIGN KEY (like_username) REFERENCES users(username))";
     result = await queryDB(like_account);
 }
 
@@ -172,13 +171,13 @@ app.get('/readmyPost', async (req, res) => {
     res.json(result);
 })
 
-app.get('/getlikedata', async (req,res) => {
-    
-    let sql = `Select posts.post_id, count(like_accounts.liked_id) as count From like_accounts 
-    join posts on like_accounts.post_id = posts.post_id 
-    group by posts.post_id`;
+app.get('/getlikecount', async (req,res) => {
+    let postid = req.query.post_id;
+    console.log("postid = " + postid);
+    let sql = `Select count(liked_id) as like_count From like_accounts where post_id = ${postid}`;
     result = await queryDB(sql);
     result = Object.assign({},result);
+    console.log("this post have like:");
     console.log(result);
     res.json(result);
 })
@@ -192,35 +191,20 @@ app.post('/writePost', async (req, res) => {
 })
 
 app.post('/likethispost', async (req, res) => {
-    sqlask = `select like_username from like_accounts where like_username = '${req.body.user}'`;
+    sqlask = `select like_username from like_accounts where like_username = '${req.body.user}' AND post_id = '${req.body.postid}'limit 1`;
     result = await queryDB(sqlask);
-    console.log(result);
-    
-    // let keys = Object.keys(data);
-
-    //         let correctly = false;
-
-    //         for (var i = 0; i < keys.length; i++) {
-    //             let username = data[keys[i]].username;
-    //             let password = data[keys[i]].password;
-
-    //             if (sendVal.username == username && sendVal.password == password) {
-    //                 correctly = true;
-    //             };
-    //         }
-
-    //         if (correctly) {
-    //             console.log("correct password & username!");
-    //             resolve(true);
-    //         } else {
-    //             console.log("incorrect password & username!");
-    //             resolve(false);
-    //         }
-
-    sql = `INSERT INTO like_accounts (post_id,like_username) VALUES ("${req.body.postid}", "${req.body.user}")`;
-    result = await queryDB(sql);
-    console.log("New like created successfully");
-    res.send("create");
+    result = Object.assign({}, result);
+    if(Object.keys(result).length > 0){
+        sql = `DELETE FROM like_accounts WHERE like_username = '${req.body.user}' AND post_id = '${req.body.postid}'`;
+        result = await queryDB(sql);
+        console.log("this account already like this post, remove like from the post");
+        res.send("create");
+    } else {
+        sql = `INSERT INTO like_accounts (post_id,like_username) VALUES ("${req.body.postid}", "${req.body.user}")`;
+        result = await queryDB(sql);
+        console.log("New like created successfully");
+        res.send("create");
+    }
 })
 
 app.post('/checkLogin', async (req, res) => {
