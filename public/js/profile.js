@@ -27,6 +27,7 @@ function pageLoad() {
     console.log("in pageLoad");
 
     document.getElementById('displayPic').onclick = fileUpload;
+    document.getElementById('fileField').onchange = fileSubmit;
     document.getElementById('feed').onclick = toFeed;
     document.getElementById('logout').onclick = logout;
 
@@ -60,7 +61,9 @@ function fileUpload() {
 
 // Handle the file submission for uploading a profile picture
 async function fileSubmit() {
+    console.log("summit new profile image");
     const formData = new FormData(document.getElementById('formId'));
+    console.log(typeof(formData));
     formData.append('isAvatarUpload', 'true');
 
     try {
